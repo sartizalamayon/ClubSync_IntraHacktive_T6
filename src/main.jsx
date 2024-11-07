@@ -18,9 +18,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
     <RouterProvider router={router}/>
 
-    {/* <div className='text-3xl'>
-      Main
-    </div> */}
-
   </React.StrictMode>,
 )

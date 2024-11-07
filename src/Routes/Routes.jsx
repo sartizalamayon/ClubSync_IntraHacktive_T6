@@ -10,7 +10,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />,  // Update this line to render the Home component
+        element: <Home />,
       },
     ],
   },

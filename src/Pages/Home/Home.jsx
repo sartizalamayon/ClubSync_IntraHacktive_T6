@@ -9,9 +9,9 @@ const Home = () => {
             <p className="mb-5">
               Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
               excepturi exercitationem quasi. In deleniti eaque aut repudiandae
-              et a id nisi. Ami Niazzzzzzzzzzzzz
+              et a id nisi. ami Riyajul tumi lolo lolo Ami Niazzzzzzzzzzzzz
             </p>
-            <button className="btn btn-primary">Get Started</button>
+            <button className="btn btn-secondary">Get Started</button>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import './index.css'
+import './index.css';
 import {
   RouterProvider,
 } from "react-router-dom";
@@ -15,6 +15,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         </AuthProvider>
       </QueryClientProvider> 
     </HelmetProvider>  */}
+
     <RouterProvider router={router}/>
+
+    {/* <div className='text-3xl'>
+      Main
+    </div> */}
+
   </React.StrictMode>,
 )

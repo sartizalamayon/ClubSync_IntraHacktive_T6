@@ -3,5 +3,71 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.fc-toolbar-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 36px;
+  color: #303972;
+}
 
+.fc-button {
+  background-color: #4d44b5 !important;
+}
+.fc-day-today {
+  /* border: 2px solid #4d44b5 !important; */
+  border-radius: 10px;
+  background-color: #fb7d5b !important;
+}
 
+.fc-daygrid-day-frame {
+  background-color: #303972 !important;
+  /* padding: 10px; */
+}
+thead {
+  font-size: 14px;
+  font-weight: 600px;
+  color: #a098ae;
+  border-collapse: collapse !important;
+  border: 0px !important;
+  border-spacing: 0px !important;
+  border: none !important;
+}
+
+table {
+  border-collapse: collapse !important;
+}
+.fc-daygrid-day-frame,
+.fc-col-header-cell {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.fc-scrollgrid-sync-inner {
+  background-color: white !important;
+  border: 0px solid #303972;
+  border-radius: 10px !important;
+  /* margin: 10px !important; */
+}
+
+.fc-event-title-container {
+  background-color: rgb(77, 68, 181) !important;
+}
+td {
+  border: none !important;
+}
+table {
+  border-spacing: 0px !important;
+  border: none !important;
+}
+th {
+  border: 0;
+  border-collapse: collapse;
+}
+.fc-today-button {
+  background: #4d44b5 !important;
+  border: 0 !important;
+}
+.fc-daygrid-day-frame {
+  /* border: 1px solid #303972 !important; */
+  margin: 10px;
+}

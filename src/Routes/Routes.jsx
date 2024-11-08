@@ -1,10 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
-import Home from "../Pages/Home/Home";
-import Root from "../Layout/Root";
 import Dashboard from "../Layout/Dashboard";
-import PrivateRoute from "./PrivateRoute";
+import Root from "../Layout/Root";
 import DashboardHome from "../Pages/Dashboard/DashboardHome";
+import Home from "../Pages/Home/Home";
 import Login from "../Pages/Login/Login";
+import Calendar from "../Pages/Shared/Calendar";
+import PrivateRoute from "./PrivateRoute";
 
 export const router = createBrowserRouter([
   {
@@ -23,7 +24,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: 'dashboard',
+    path: '/dashboard',
     element: <PrivateRoute><Dashboard/></PrivateRoute>,
     children: [
       {
@@ -35,7 +36,11 @@ export const router = createBrowserRouter([
       
       // OCA dashboard
       
-      // admin dashboard
+      // shared
+      {
+        path: '/dashboard/calendar',
+        element: <PrivateRoute><Calendar/></PrivateRoute>
+      }
       
     ]
   }

@@ -1,11 +1,15 @@
 import { createBrowserRouter } from "react-router-dom";
-import Home from "../Pages/Home/Home";
-import Root from "../Layout/Root";
 import Dashboard from "../Layout/Dashboard";
-import PrivateRoute from "./PrivateRoute";
+import Root from "../Layout/Root";
 import DashboardHome from "../Pages/Dashboard/DashboardHome";
+import Home from "../Pages/Home/Home";
 import Login from "../Pages/Login/Login";
 import EventPlanner from "../Pages/ClubPages/EventPlanner/EventPlanner";
+import Calendar from "../Pages/Shared/Calendar";
+import PrivateRoute from "./PrivateRoute";
+import Approval from "../Pages/Dashboard/OCA/Approval";
+import ClubInfo from "../Pages/Dashboard/OCA/ClubInfo";
+import Chat from "../Pages/Dashboard/Club/Chat";
 
 export const router = createBrowserRouter([
   {
@@ -24,7 +28,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: 'dashboard',
+    path: '/dashboard',
     element: <PrivateRoute><Dashboard/></PrivateRoute>,
     children: [
       {
@@ -37,10 +41,24 @@ export const router = createBrowserRouter([
       }
       
       // Club dashboard
-      
+      {
+        path: '/dashboard/chat',
+        element: <PrivateRoute><Chat/></PrivateRoute>
+      },
       // OCA dashboard
-      
-      // admin dashboard
+      {
+        path: '/dashboard/approval',
+        element: <PrivateRoute><Approval/></PrivateRoute>
+      },
+      {
+        path: '/dashboard/club-info',
+        element: <PrivateRoute><ClubInfo/></PrivateRoute>
+      },
+      // shared
+      {
+        path: '/dashboard/calendar',
+        element: <PrivateRoute><Calendar/></PrivateRoute>
+      }
       
     ]
   }

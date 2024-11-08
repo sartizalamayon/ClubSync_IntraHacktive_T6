@@ -26,7 +26,8 @@ const Dashboard = () => {
                   </li>
                   <li className="">
                     <NavLink to={"/dashboard"}>
-                      <FaHome className="text-3xl"/>Dashboard
+                      <FaHome className="text-3xl" />
+                      Dashboard
                     </NavLink>
                   </li>
                   <li>

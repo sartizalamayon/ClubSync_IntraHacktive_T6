@@ -33,7 +33,7 @@ const Dashboard = () => {
                   <li>
                     <NavLink to={"/dashboard/approval"}>
                       <CgEventbrite className="text-2xl" />{" "}
-                      <span className="text-xl">Event Approval</span>
+                      <span className="text-xl">Approval</span>
                     </NavLink>
                   </li>
                   <li>
@@ -110,7 +110,7 @@ const Dashboard = () => {
               </li>
             </ul>
           </div>
-          <div className="p-[30px]">
+          <div className="p-[30px] w-full h-screen bg-[#F3F4FF]" >
             <Outlet />
           </div>
         </div>

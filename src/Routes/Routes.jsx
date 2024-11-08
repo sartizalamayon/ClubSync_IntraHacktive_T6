@@ -5,6 +5,7 @@ import Dashboard from "../Layout/Dashboard";
 import PrivateRoute from "./PrivateRoute";
 import DashboardHome from "../Pages/Dashboard/DashboardHome";
 import Login from "../Pages/Login/Login";
+import EventPlanner from "../Pages/ClubPages/EventPlanner/EventPlanner";
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
         path: '/dashboard',
         element: <PrivateRoute><DashboardHome/></PrivateRoute>
       },
+      {
+        path: '/dashboard/event-planner',
+        element: <PrivateRoute><EventPlanner/></PrivateRoute>
+      }
       
       // Club dashboard
       

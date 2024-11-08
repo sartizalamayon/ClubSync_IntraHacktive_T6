@@ -16,7 +16,7 @@ const Dashboard = () => {
     <div>
       <div >
         <div className="flex">
-          <div className=" bg-[#4D44B4]  w-[250px]  h-screen">
+          <div className=" bg-[#4D44B4]  w-[250px]  min-h-screen">
             <ul className="menu pr-0 space-y-5 mt-2 p-4 text-base text-[#C1BBEB] font-medium ">
               {/* OCA navbar */} 
               {role == "oca" && (
@@ -110,7 +110,7 @@ const Dashboard = () => {
               </li>
             </ul>
           </div>
-          <div className="p-[30px]">
+          <div className="p-[30px] bg-[rgb(243,244,245)] w-full">
             <Outlet />
           </div>
         </div>

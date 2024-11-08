@@ -1,14 +1,15 @@
-import { CgAdd, CgLogOut } from "react-icons/cg";
-import { FaBookmark, FaHome } from "react-icons/fa";
-import { GiGymBag } from "react-icons/gi";
-import { MdSettingsApplications } from "react-icons/md";
+import { CgEventbrite, CgLogOut } from "react-icons/cg";
+import { FaCalendar, FaHome } from "react-icons/fa";
+import { MdAnalytics, MdChat, MdEvent } from "react-icons/md";
 import { NavLink, Outlet } from "react-router-dom";
 
-import './Dash.css';
 import { useContext } from "react";
+import { BiCalendar, BiChat } from "react-icons/bi";
+import { BsInfo } from "react-icons/bs";
 import { AuthContext } from "../Context/AuthProvider";
+import './Dash.css';
 const Dashboard = () => {
-  const {user} = useContext(AuthContext);
+  const {user, logOut} = useContext(AuthContext);
   const role = user?.email == 'oca@bracu.ac.bd' ? 'oca' : 'club';
   console.log(role);
   return (
@@ -29,15 +30,27 @@ const Dashboard = () => {
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to={"/dashboard/all-trainers"}>
-                      <GiGymBag className="text-3xl" />{" "}
-                      <span className="text-xl">All Trainers</span>
+                    <NavLink to={"/dashboard/approval"}>
+                      <CgEventbrite className="text-2xl" />{" "}
+                      <span className="text-xl">Event Approval</span>
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to={"/dashboard/applied-trainers"}>
-                      <MdSettingsApplications className="text-3xl" />{" "}
-                      <span className="xl">Applied Trainers</span>
+                    <NavLink to={"/dashboard/calendar"}>
+                      <BiCalendar className="text-3xl" />
+                      <span className="xl">Calendar</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to={"/dashboard/club-info"}>
+                      <BsInfo className="text-4xl" />
+                      <span className="xl">Club Info</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to={"/dashboard/oca-chat"}>
+                      <BiChat className="text-3xl" />
+                      <span className="xl">Chat</span>
                     </NavLink>
                   </li>
                 </>
@@ -54,17 +67,27 @@ const Dashboard = () => {
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to={"/dashboard/add-new-slot"}>
-                      {" "}
-                      <CgAdd className="text-3xl" />{" "}
-                      <p className="text-xl">Add New Slot</p>{" "}
+                    <NavLink to={"/dashboard/event-planner"}>
+                      <MdEvent className="text-3xl"/>
+                      <p className="text-xl">Event Planner</p>{" "}
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to={"/dashboard/room_bookings"}>
-                      {" "}
-                      <FaBookmark className="text-3xl" />{" "}
-                      <span className="text-x">Room-Booking</span>{" "}
+                    <NavLink to={"/dashboard/calendar"}>
+                      <FaCalendar className="text-3xl" />
+                      <span className="text-x">Calendar</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to={"/dashboard/analytics"}>
+                      <MdAnalytics className="text-3xl" />
+                      <span className="text-x">Analytics</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to={"/dashboard/chat"}>
+                      <MdChat className="text-3xl" />
+                      <span className="text-x">Chat</span>
                     </NavLink>
                   </li>
                 </>
@@ -78,7 +101,7 @@ const Dashboard = () => {
                   <span className="text-xl">Home</span>
                 </NavLink>
               </li>
-              <li>
+              <li onClick={()=>{logOut()}}>
                 <NavLink to={"/"}>
                   <CgLogOut className="text-3xl" />
                   <span className="text-xl">Logout</span>

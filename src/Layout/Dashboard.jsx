@@ -3,12 +3,14 @@ import { FaBookmark, FaHome } from "react-icons/fa";
 import { GiGymBag } from "react-icons/gi";
 import { MdSettingsApplications } from "react-icons/md";
 import { NavLink, Outlet } from "react-router-dom";
+
+
 const Dashboard = () => {
   const role = "club";
   return (
     <div>
-      <div className="font-poppins">
-        <div className="grid grid-cols-4 gap-6 md:grid-cols-8 lg:grid-cols-12">
+      <div >
+        <div className="grid grid-cols-4 gap-6 md:grid-cols-8 lg:grid-cols-12 border border-red-600">
           <div className="col-span-4 lg:col-span-3 bg-[#4D44B4]  w-[300px]  h-screen p-2">
             <ul className="menu space-y-5 mt-2 p-4 text-lg text-[#C1BBEB] ">
               {/* OCA navbar */}

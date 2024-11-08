@@ -5,8 +5,12 @@ import { MdSettingsApplications } from "react-icons/md";
 import { NavLink, Outlet } from "react-router-dom";
 
 import './Dash.css';
+import { useContext } from "react";
+import { AuthContext } from "../Context/AuthProvider";
 const Dashboard = () => {
-  const role = "club";
+  const {user} = useContext(AuthContext);
+  const role = user?.email == 'oca@bracu.ac.bd' ? 'oca' : 'club';
+  console.log(role);
   return (
     <div>
       <div >

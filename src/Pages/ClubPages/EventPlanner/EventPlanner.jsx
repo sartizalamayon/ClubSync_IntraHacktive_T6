@@ -1,14 +1,28 @@
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { useContext } from 'react';
+import { AuthContext } from '../../../Context/AuthProvider';
+import Swal from 'sweetalert2';
+import usePendingRequests from '../../../hooks/usePendingRequests';
+import useRespondedRequests from '../../../hooks/useRespondedRequests';
 
 const EventPlanner = () => {
   const {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm();
+
+  const {user} = useContext(AuthContext)
+  //
+  const [pendingRequests, pendingRequestsRefetch] = usePendingRequests();
+  const [respondedRequests, respondedRequestsRefetch] = useRespondedRequests();
+
+  console.log(respondedRequests)
+
 
   const showBudget = watch('needsBudget') || false;
   const showRoom = watch('needsRoom') || false;
@@ -16,13 +30,38 @@ const EventPlanner = () => {
 
   const mutation = useMutation({
     mutationFn: (data) => {
-      return axios.post('/api/events', data);
+      return axios.post('http://localhost:3000/new-event', data);
     },
+    onSuccess: () =>{
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Request Sent",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
+      //clear the form
+      reset();
+
+      //refetch pending requests
+      pendingRequestsRefetch();
+    },
+    onError: (e) =>{
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: `Error - ${e}`,
+          showConfirmButton: false,
+          timer: 1500,
+        })
+    }
   });
 
   const onSubmit = (data) => {
-    console.log(data)
-    mutation.mutate(data);
+    const postData = {...data, status:"Pending", response:"", feedback:"", requestDate: new Date(), clubMail:user?.email}
+    console.log(postData)
+    mutation.mutate(postData);
   };
 
 
@@ -171,12 +210,12 @@ const EventPlanner = () => {
 
               {/* Additional Requirements */}
               <div>
-                <label className="block mb-2 text-[#4c44b3] font-medium">Additional Requirements</label>
+                <label className="block mb-2 text-[#4c44b3] font-medium">Additional Requirements or Documents</label>
                 <textarea
                   {...register('additionalRequirements')}
                   className="w-full p-2 bg-white border-[#4c44b3] border-opacity-30 border-2 rounded"
                   rows={4}
-                  placeholder="Anything else you need - Sound System, IT support or something else. (Optional)"
+                  placeholder="Anything else you need - Sound System, IT support or something else. If you want to submit a document upload the document in the drive and share the drive link here."
                 />
               </div>
 
@@ -198,7 +237,7 @@ const EventPlanner = () => {
               </div>
 
               {/* Submit Button */}
-              <div>
+              <div className='w-full flex justify-end pb-5'>
                 <button
                   type="submit"
                   className="bg-[#4c44b3] text-white px-6 py-2 rounded hover:bg-opacity-90 transition-colors"
@@ -211,26 +250,32 @@ const EventPlanner = () => {
         </div>
 
         {/* Sidebar Sections - 35% width */}
-        <div className="w-[40%] flex flex-col gap-6">
+        <div className="w-[40%] flex flex-col gap-6 pt-[4.3rem]">
           {/* Pending Events Section */}
-          <div className="bg-white rounded-lg shadow-lg p-6 h-64">
-            <h2 className="text-red-500 text-lg font-semibold">Pending Events</h2>
-            <p className="text-red-400">Events that is not responded by the OCA</p>
-          </div>
+<div className="rounded-lg">
+  <div className='bg-white rounded-xl shadow-lg p-6'>
+    <h2 className="text-[#4c44b3] text-[1.3rem] font-bold">Pending Events</h2>
+    <p className="text-gray-500">Events that are not yet responded by the OCA</p>
+  </div>
+  <div className="mt-4 space-y-4">
+    {pendingRequests?.map((event) => (
+      <ProposalCard key={event._id} event={event} pendingRequestsRefetch={pendingRequestsRefetch}/>
+    ))}
+  </div>
+</div>
 
-          {/* Previous Proposals Section */}
-          <div className="bg-white rounded-lg shadow-lg p-6 h-64">
-            <h2 className="text-red-500 text-lg font-semibold">Previous Proposals</h2>
-            <p className="text-red-400">
-              Events that is responded by the OCA
-              <br />
-              Here Two Types of thing will be there.
-              <br />
-              Accepted | Rejected
-              <br />
-              rejected ones will have a feedback.
-            </p>
-          </div>
+{/* Previous Proposals Section */}
+<div className="rounded-lg">
+  <div className='bg-white rounded-xl shadow-lg p-6'>
+    <h2 className="text-[#4c44b3] text-[1.3rem] font-bold">Recent Proposals</h2>
+    <p className="text-gray-500">Accepted or Rejected proposals with feedback</p>
+  </div>
+  <div className="mt-4 space-y-4">
+    {respondedRequests?.map((event) => (
+      <EventCard key={event._id} event={event} />
+    ))}
+  </div>
+</div>
         </div>
       </div>
     </div>
@@ -238,3 +283,128 @@ const EventPlanner = () => {
 };
 
 export default EventPlanner;
+
+// ProposalCard for Pending Events
+const ProposalCard = ({ event , pendingRequestsRefetch}) => {
+  const handleDelete = (eventId) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`http://localhost:3000/event-planner/${eventId}`)
+        .then(() => {
+            Swal.fire(
+              'Deleted!',
+              'Your file has been deleted.',
+              'success'
+            )
+            pendingRequestsRefetch()
+          }
+          
+      )
+      }
+    }).catch((error) => {
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: `Error - ${error}`,
+        showConfirmButton: false,
+        timer: 1500,
+    })
+    })
+  }
+
+  return (
+    <div className="bg-white rounded-xl shadow-lg p-4 mt-4  border-l-8 border-[#4c44b3]">
+      <div className="flex items-start gap-4 relative">
+        <div className='text-[#4c44b3] font-bold absolute bottom-0 right-1 flex justify-center items-center gap-2 border border-gray-200 p-1 rounded-lg' >
+          <span className='h-2 w-2 inline-block rounded-full bg-[#b6cc29]'></span>Pending
+        </div>
+
+        <button onClick={() => handleDelete(event._id)} className='absolute font-mono text-xl top-0 right-0 text-gray-500 hover:text-gray-700'>
+          x
+        </button>
+        {/* Left colored bar */}
+        <div className="w-2 h-full bg-[rgb(240,241,255)] rounded-full self-stretch" />
+        
+        <div className="flex-1">
+          <div className="flex justify-between items-start">
+            <div>
+              <h3 className="font-semibold text-lg text-[#4c44b3]">{event.title}</h3>
+              <p className="text-gray-500 text-sm mt-1">{event.description.substring(0, 100)}...</p>
+            </div>
+            {/* Status circle */}
+            <div className="w-3 h-3 rounded-full bg-[rgb(240,241,255)]" />
+          </div>
+          
+          <div className="mt-4 flex items-center gap-4 text-sm text-gray-500">
+            <div className="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span>{new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>{new Date(event.requestDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  );
+};
+
+// EventCard for Previous Proposals
+const EventCard = ({ event }) => {
+  return (
+    <div className="bg-white rounded-xl shadow-lg p-4 mt-4 border-l-8 border-[#4c44b3] relative">
+      <span className={`w-3 h-3 rounded-full absolute top-4 right-4 ${event.response === 'Accepted' ? 'bg-green-500' : 'bg-red-500'}`}></span>
+      <div className="flex items-start gap-4">
+        
+        <div className="flex-1">
+          <div className="flex justify-between items-start">
+            <div>
+              <h3 className="font-semibold text-lg text-[#4c44b3]">{event.title}</h3>
+              <p className="text-gray-500 text-sm mt-1">{event.description.substring(0, 100)}...</p>
+            </div>
+          </div>
+          
+          <div className="mt-4 space-y-2">
+            <div className="flex items-center gap-4 text-sm text-gray-500">
+              <div className="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>{new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{new Date(event.requestDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+              </div>
+            </div>
+            {event.feedback && (
+              <div className="bg-gray-50 p-3 rounded-lg">
+                <p className="text-sm text-gray-600">
+                  <span className="font-medium">Feedback: </span>
+                  {event.feedback || 'No feedback provided'}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

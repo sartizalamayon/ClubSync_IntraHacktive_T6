@@ -92,9 +92,6 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <div className="col-span-4 lg:col-span-3 bg-gray-400 text-white  w-[300px]  h-screen p-2">
-        <h1>sdhfvjedhvf</h1>
-      </div>
     </div>
   );
 };

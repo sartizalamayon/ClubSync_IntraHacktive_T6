@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { CgAdd } from 'react-icons/cg';
 import { FaHome, FaList } from 'react-icons/fa';
 import { GiGymBag } from 'react-icons/gi';
@@ -38,8 +38,7 @@ const Dashboard = () => {
                     <>
                       <li className=''>
                         <NavLink to={"/dashboard"}>
-                          {" "}
-                          <FaHome className='text-3xl' /> Dashboard{" "}
+                          <FaHome className='text-3xl' /> Dashboard
                         </NavLink>
                       </li>
                       <li>

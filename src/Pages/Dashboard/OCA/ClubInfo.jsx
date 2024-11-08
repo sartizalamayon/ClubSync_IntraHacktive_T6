@@ -1,18 +1,13 @@
-import dayGridPlugin from "@fullcalendar/daygrid";
-import FullCalendar from "@fullcalendar/react";
+import React from "react";
 import { MdNotificationsActive } from "react-icons/md";
-import "../../index.css";
 
-const Calendar = () => {
-  const handleDateClick = (info) => {
-    alert(info);
-  };
+const ClubInfo = () => {
   return (
-    <div className="">
-      {/* nav for this component */}
+    <div>
+      {/* header */}
       <div className="navbar p-0 mt-[-20px]">
         <div className="flex-1">
-          <a className="text-3xl font-bold text-[#303972] ">Events</a>
+          <a className="text-3xl font-bold text-[#303972] ">Clubs</a>
         </div>
         <div className="flex-none gap-2">
           <div className="form-control">
@@ -51,40 +46,28 @@ const Calendar = () => {
           </div>
         </div>
       </div>
-      <div className="flex gap-[30px] mt-[-12px]">
-        {/* calender */}
-        <div className="w-[70%] h-full mt-5 bg-[#FFFFFF] p-10 rounded-lg">
-          <FullCalendar
-            plugins={[dayGridPlugin]}
-            initialView="dayGridMonth"
-            dateClick={(dateInfo) => handleDateClick(dateInfo)}
-            weekends={true}
-            headerToolbar={{
-              left: "prev,next today",
-              center: "title",
-              right: "dayGridMonth",
-            }}
-            events={[
-              { title: "BUCC", date: "2024-11-01" },
-              { title: "BUEDF", date: "2024-11-01" },
-            ]}
-          />
-        </div>
-        {/* notice */}
-        <div className="w-[30%] mt-5 gap-3 flex flex-col">
-            {/* heading */}
-          <div>
-            <h1 className="bg-white p-10 text-center text-2xl font-bold rounded-2xl text-[#363B64]">Our Events</h1>
+      {/* club cards */}
+      <div>
+        {/* card  1 */}
+        <div className="card bg-white w-80 h-80 shadow-xl">
+          <figure className="px-10 pt-10 rounded-full">
+            <img
+              src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+              alt="Shoes"
+              className="rounded-full"
+            />
+          </figure>
+          <div className="card-body items-center text-center">
+            <h2 className="card-title">Club Name</h2>
+            <p>Category</p>
+            <div className="card-actions">
+              <button className="btn btn-primary">Buy Now</button>
+            </div>
           </div>
-          <div>
-            <h1 className="bg-white p-10 text-center text-2xl font-bold rounded-2xl border-l-[30px] border-orange-500 text-[#363B64]">Pending Events</h1>
-          </div>
-          
-          
         </div>
       </div>
     </div>
   );
 };
 
-export default Calendar;
+export default ClubInfo;

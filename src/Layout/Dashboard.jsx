@@ -3,13 +3,13 @@ import { FaBookmark, FaHome } from "react-icons/fa";
 import { GiGymBag } from "react-icons/gi";
 import { MdSettingsApplications } from "react-icons/md";
 import { NavLink, Outlet } from "react-router-dom";
-
+import "./Dash.css"
 
 const Dashboard = () => {
   const role = "club";
   return (
-    <div>
-      <div >
+    <div className="flex">
+      <div>
         <div className="grid grid-cols-4 gap-6 md:grid-cols-8 lg:grid-cols-12 border border-red-600">
           <div className="col-span-4 lg:col-span-3 bg-[#4D44B4]  w-[300px]  h-screen p-2">
             <ul className="menu space-y-5 mt-2 p-4 text-lg text-[#C1BBEB] ">
@@ -21,7 +21,8 @@ const Dashboard = () => {
                   </li>
                   <li className="">
                     <NavLink to={"/dashboard"}>
-                      <FaHome className="text-3xl"/>Dashboard
+                      <FaHome className="text-3xl" />
+                      Dashboard
                     </NavLink>
                   </li>
                   <li>
@@ -82,10 +83,14 @@ const Dashboard = () => {
               </li>
             </ul>
           </div>
+
           <div className="col-span-4 lg:col-span-9 p-[50px]">
             <Outlet />
           </div>
         </div>
+      </div>
+      <div className="col-span-4 lg:col-span-3 bg-gray-400 text-white  w-[300px]  h-screen p-2">
+        <h1>sdhfvjedhvf</h1>
       </div>
     </div>
   );

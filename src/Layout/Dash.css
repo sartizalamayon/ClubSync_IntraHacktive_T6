@@ -1,4 +1,4 @@
 a.active {
-    background-color: white ;
-    border-radius: 30px; 
+    background-color: white !important ;
+    border-radius: 20px; 
   }

@@ -1,4 +1,3 @@
-import React from 'react';
 import { CgAdd } from 'react-icons/cg';
 import { FaHome, FaList } from 'react-icons/fa';
 import { GiGymBag } from 'react-icons/gi';
@@ -29,10 +28,8 @@ const Dashboard = () => {
                           <MdSettingsApplications /> Applied Trainers
                         </NavLink>
                       </li>
-                      
                     </>
                   )}
-
                   {/* CLUB Navbar */}
                   {role == "club" && (
                     <>
@@ -46,6 +43,12 @@ const Dashboard = () => {
                         <NavLink to={"/dashboard/add-new-slot"}>
                           {" "}
                           <CgAdd /> Add New Slot{" "}
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink to={"/dashboard/"}>
+                          {" "}
+                          <CgAdd /> Kns{" "}
                         </NavLink>
                       </li>
                       
@@ -68,7 +71,24 @@ const Dashboard = () => {
                       Classes
                     </NavLink>
                   </li>
-                  
+                  <li>
+                    <NavLink to={"/bookings"}>
+                      <FaList />
+                      Bookings
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to={"/Rooms"}>
+                      <FaList />
+                      Rooms
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to={"/vga"}>
+                      <FaList />
+                      VGA
+                    </NavLink>
+                  </li>
                 </ul>
               </div>
               <div className="col-span-4 lg:col-span-9 p-[50px]">

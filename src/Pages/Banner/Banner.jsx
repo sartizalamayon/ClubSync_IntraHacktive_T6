@@ -1,4 +1,4 @@
-const Header = () => {
+const Banner = () => {
     return (
         <div>
             
@@ -6,4 +6,4 @@ const Header = () => {
     );
 };
 
-export default Header;
+export default Banner;

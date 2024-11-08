@@ -6,6 +6,9 @@ import Home from "../Pages/Home/Home";
 import Login from "../Pages/Login/Login";
 import Calendar from "../Pages/Shared/Calendar";
 import PrivateRoute from "./PrivateRoute";
+import Approval from "../Pages/Dashboard/OCA/Approval";
+import ClubInfo from "../Pages/Dashboard/OCA/ClubInfo";
+import Chat from "../Pages/Dashboard/Club/Chat";
 
 export const router = createBrowserRouter([
   {
@@ -33,9 +36,19 @@ export const router = createBrowserRouter([
       },
       
       // Club dashboard
-      
+      {
+        path: '/dashboard/chat',
+        element: <PrivateRoute><Chat/></PrivateRoute>
+      },
       // OCA dashboard
-      
+      {
+        path: '/dashboard/approval',
+        element: <PrivateRoute><Approval/></PrivateRoute>
+      },
+      {
+        path: '/dashboard/club-info',
+        element: <PrivateRoute><ClubInfo/></PrivateRoute>
+      },
       // shared
       {
         path: '/dashboard/calendar',

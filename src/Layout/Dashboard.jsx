@@ -15,7 +15,7 @@ const Dashboard = () => {
   return (
     <div>
       <div >
-        <div className="flex">
+        <div className="flex font-poppins">
           <div className=" bg-[#4D44B4]  w-[250px]  h-screen">
             <ul className="menu pr-0 space-y-5 mt-2 p-4 text-base text-[#C1BBEB] font-medium ">
               {/* OCA navbar */} 

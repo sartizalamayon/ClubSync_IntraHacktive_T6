@@ -1,18 +1,14 @@
-import dayGridPlugin from "@fullcalendar/daygrid";
-import FullCalendar from "@fullcalendar/react";
+import React from "react";
+import { BsEye } from "react-icons/bs";
 import { MdNotificationsActive } from "react-icons/md";
-import "../../index.css";
 
-const Calendar = () => {
-  const handleDateClick = (info) => {
-    alert(info);
-  };
+const Approval = () => {
   return (
-    <div className="">
-      {/* nav for this component */}
+    <div>
+      {/* header */}
       <div className="navbar p-0 mt-[-20px]">
         <div className="flex-1">
-          <a className="text-3xl font-bold text-[#303972] ">Events</a>
+          <a className="text-3xl font-bold text-[#303972] ">Approval Request</a>
         </div>
         <div className="flex-none gap-2">
           <div className="form-control">
@@ -51,40 +47,42 @@ const Calendar = () => {
           </div>
         </div>
       </div>
-      <div className="flex gap-[30px] mt-[-12px]">
-        {/* calender */}
-        <div className="w-[70%] h-full mt-5 bg-[#FFFFFF] p-10 rounded-lg">
-          <FullCalendar
-            plugins={[dayGridPlugin]}
-            initialView="dayGridMonth"
-            dateClick={(dateInfo) => handleDateClick(dateInfo)}
-            weekends={true}
-            headerToolbar={{
-              left: "prev,next today",
-              center: "title",
-              right: "dayGridMonth",
-            }}
-            events={[
-              { title: "BUCC", date: "2024-11-01" },
-              { title: "BUEDF", date: "2024-11-01" },
-            ]}
-          />
-        </div>
-        {/* notice */}
-        <div className="w-[30%] mt-5 gap-3 flex flex-col">
-            {/* heading */}
-          <div>
-            <h1 className="bg-white p-10 text-center text-2xl font-bold rounded-2xl text-[#363B64]">Our Events</h1>
-          </div>
-          <div>
-            <h1 className="bg-white p-10 text-center text-2xl font-bold rounded-2xl border-l-[30px] border-orange-500 text-[#363B64]">Pending Events</h1>
-          </div>
-          
-          
+      <div className="bg-white p-8 rounded-xl mt-2">
+        <div className="overflow-x-auto">
+          <table className="table table-zebra">
+            {/* head */}
+            <thead className="text-[12px] font-semibold text-[#303972]">
+              <tr>
+                <th></th>
+                <th>Title</th>
+                <th>Club</th>
+                <th>Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* row 1 */}
+              <tr>
+                <th>1</th>
+                <td className="text-lg font-semibold text-[#303972]">
+                  Cy Ganderton
+                </td>
+                <td>Quality Control Specialist</td>
+                <td className="text-sm font-normal text-[#A098AE]">
+                  25-11-2024
+                </td>
+                <td>
+                  <button className="btn bg-[#FB7D5B] rounded-xl text-white font-normal">
+                    <BsEye />
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   );
 };
 
-export default Calendar;
+export default Approval;

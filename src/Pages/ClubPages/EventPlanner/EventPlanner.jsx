@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
@@ -7,6 +8,27 @@ import Swal from 'sweetalert2';
 import usePendingRequests from '../../../hooks/usePendingRequests';
 import useRespondedRequests from '../../../hooks/useRespondedRequests';
 import { MdNotificationsActive } from 'react-icons/md';
+import { HiOutlineViewList } from "react-icons/hi";
+
+{/* These imports should be added at the top of your file */}
+import { MdTitle, MdDescription, MdDateRange } from 'react-icons/md';
+import { BiMoney } from 'react-icons/bi';
+import { BsBuilding } from 'react-icons/bs';
+import { HiOutlineUserGroup } from 'react-icons/hi';
+import { FaRegFileAlt } from 'react-icons/fa';
+import { RiCheckboxCircleLine } from 'react-icons/ri';
+
+const Tooltip = ({ message, children }) => {
+  return (
+    <div className="relative group">
+      {children}
+      <div className="absolute hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 right-0 top-full mt-1 whitespace-nowrap z-50">
+        {message}
+        <div className="absolute bottom-full right-2 border-4 border-transparent border-b-gray-800"></div>
+      </div>
+    </div>
+  );
+};
 
 const EventPlanner = () => {
   const {
@@ -17,23 +39,23 @@ const EventPlanner = () => {
     formState: { errors },
   } = useForm();
 
-  const {user} = useContext(AuthContext)
-  //
+  const {user} = useContext(AuthContext);
   const [pendingRequests, pendingRequestsRefetch] = usePendingRequests();
   const [respondedRequests, respondedRequestsRefetch] = useRespondedRequests();
-
-  console.log(respondedRequests)
-
 
   const showBudget = watch('needsBudget') || false;
   const showRoom = watch('needsRoom') || false;
   const showGuestPasses = watch('needsGuestPasses') || false;
 
+  // Get only the first two items for initial display
+  const visiblePendingRequests = pendingRequests?.slice(0, 2);
+  const visibleRespondedRequests = respondedRequests?.slice(0, 2);
+
   const mutation = useMutation({
     mutationFn: (data) => {
       return axios.post('http://localhost:3000/new-event', data);
     },
-    onSuccess: () =>{
+    onSuccess: () => {
       Swal.fire({
         position: "top-end",
         icon: "success",
@@ -41,29 +63,25 @@ const EventPlanner = () => {
         showConfirmButton: false,
         timer: 1500,
       });
-
-      //clear the form
       reset();
-
-      //refetch pending requests
       pendingRequestsRefetch();
     },
-    onError: (e) =>{
-        Swal.fire({
-          position: "top-end",
-          icon: "error",
-          title: `Error - ${e}`,
-          showConfirmButton: false,
-          timer: 1500,
-        })
+    onError: (e) => {
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: `Error - ${e}`,
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
   });
 
   const onSubmit = (data) => {
-    const postData = {...data, status:"Pending", response:"", feedback:"", requestDate: new Date(), clubMail:user?.email}
-    console.log(postData)
+    const postData = {...data, status:"Pending", response:"", feedback:"", requestDate: new Date(), clubMail:user?.email};
     mutation.mutate(postData);
   };
+
 
 
 
@@ -95,222 +113,402 @@ const EventPlanner = () => {
         </div>
       </div>
       <div className="flex gap-8">
-        {/* Main Form Section - 60% width */}
-        <div className="w-[55%]">
-          
-          <div className="bg-white rounded-lg shadow-lg">
-            <h2 className="text-lg font-semibold mb-6 bg-[#4c44b3] text-white p-3 rounded-tr-xl rounded-tl-xl w-full pl-4">Details</h2>
-            
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 px-9">
-              {/* Title */}
-              <div>
-                <label className="block mb-2 text-[#4c44b3] font-medium ">
-                  Title <span className="text-red-500">*</span>
-                </label>
-                <input
-                  {...register('title', { required: true })}
-                  className="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-[#4c44b3] bg-white border-[#4c44b3] border-opacity-30 border-2"
-                  placeholder="Event Title"
-                />
-                {errors.title && <span className="text-red-500">Title is required</span>}
+        {/* Main Form Section - 55% width */}
+<div className="w-[55%]">
+  <div className="bg-white rounded-lg shadow-lg">
+    <h2 className="text-lg font-semibold mb-6 bg-[#4c44b3] text-white p-3 rounded-tr-xl rounded-tl-xl w-full pl-4">Details</h2>
+    
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 px-9">
+      {/* Title */}
+      <div className="space-y-2">
+        <label className="block text-[#4c44b3] font-medium text-sm">
+          Title <span className="text-red-500">*</span>
+        </label>
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <MdTitle className="h-5 w-5 text-[#4c44b3]" />
+          </div>
+          <input
+            {...register('title', { required: true })}
+            className="w-full pl-10 pr-4 py-2 border-2 border-[#4c44b3] border-opacity-30 rounded-lg 
+                     focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white"
+            placeholder="Event Title"
+          />
+          {errors.title && <span className="text-red-500 text-sm mt-1">Title is required</span>}
+        </div>
+      </div>
+
+      {/* Description */}
+      <div className="space-y-2">
+        <label className="block text-[#4c44b3] font-medium text-sm">
+          Description <span className="text-red-500">*</span>
+        </label>
+        <div className="relative">
+          <div className="absolute left-3 top-3 pointer-events-none">
+            <MdDescription className="h-5 w-5 text-[#4c44b3]" />
+          </div>
+          <textarea
+            {...register('description', { required: true })}
+            className="w-full pl-10 pr-4 py-2 border-2 border-[#4c44b3] border-opacity-30 rounded-lg 
+                     focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white"
+            rows={4}
+            placeholder="Event Description"
+          />
+          {errors.description && <span className="text-red-500 text-sm mt-1">Description is required</span>}
+        </div>
+      </div>
+
+      {/* Budget Section */}
+      <div className="space-y-4">
+        <label className="flex items-center space-x-3 cursor-pointer group">
+          <div className="relative">
+            <input
+              type="checkbox"
+              {...register('needsBudget')}
+              className="peer sr-only"
+            />
+            <div className="w-5 h-5 border-2 border-[#4c44b3] border-opacity-30 rounded 
+                         bg-white transition-all duration-300
+                         peer-checked:border-[#4c44b3] peer-checked:border-opacity-100
+                         peer-checked:bg-[#4c44b3] group-hover:border-opacity-50">
+            </div>
+            <div className="absolute top-[2px] left-[5px] opacity-0 
+                         peer-checked:opacity-100 transition-opacity duration-300 text-white">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" viewBox="0 0 54 44" fill="currentColor">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+              </svg>
+            </div>
+          </div>
+          <span className="text-[#4c44b3] font-medium select-none flex items-center gap-2">
+            Budget Required
+          </span>
+        </label>
+
+        {showBudget && (
+          <div className="space-y-4 pl-8 animate-fadeIn">
+            <div className="relative">
+              <input
+                type="number"
+                {...register('budget', { required: showBudget })}
+                className="w-full pl-10 pr-4 py-2 border-2 border-[#4c44b3] border-opacity-30 rounded-lg 
+                         focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white"
+                placeholder="Budget Amount"
+              />
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <BiMoney className="h-5 w-5 text-[#4c44b3]" />
               </div>
-
-              {/* Description */}
-              <div>
-                <label className="block mb-2 text-[#4c44b3] font-medium">
-                  Description <span className="text-red-500">*</span>
-                </label>
-                <textarea
-                  {...register('description', { required: true })}
-                  className="w-full p-2 bg-white border-[#4c44b3] border-opacity-30 border-2 rounded focus:outline-none focus:ring-2 focus:ring-[#4c44b3]"
-                  rows={4}
-                  placeholder="Event Description"
-                />
-                {errors.description && <span className="text-red-500">Description is required</span>}
+            </div>
+            <div className="relative">
+              <div className="absolute left-3 top-3 pointer-events-none">
+                <FaRegFileAlt className="h-5 w-5 text-[#4c44b3]" />
               </div>
+              <textarea
+                {...register('budgetDetails', { required: showBudget })}
+                className="w-full pl-10 pr-4 py-2 border-2 border-[#4c44b3] border-opacity-30 rounded-lg 
+                         focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white"
+                rows={3}
+                placeholder="Provide detailed budget breakdown"
+              />
+            </div>
+          </div>
+        )}
+      </div>
 
-              {/* Budget Section */}
-              <div className="space-y-4">
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    {...register('needsBudget')}
-                    className="form-checkbox text-[#4c44b3] bg-white"
-                  />
-                  <span className="text-[#4c44b3] font-medium">Budget Required</span>
-                </label>
+      {/* Room Section with similar styling */}
+      <div className="space-y-4">
+        <label className="flex items-center space-x-3 cursor-pointer group">
+          <div className="relative">
+            <input
+              type="checkbox"
+              {...register('needsRoom')}
+              className="peer sr-only"
+            />
+            <div className="w-5 h-5 border-2 border-[#4c44b3] border-opacity-30 rounded 
+                         bg-white transition-all duration-300
+                         peer-checked:border-[#4c44b3] peer-checked:border-opacity-100
+                         peer-checked:bg-[#4c44b3] group-hover:border-opacity-50">
+            </div>
+            <div className="absolute top-[2px] left-[5px] opacity-0 
+                         peer-checked:opacity-100 transition-opacity duration-300 text-white">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" viewBox="0 0 54 44" fill="currentColor">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+              </svg>
+            </div>
+          </div>
+          <span className="text-[#4c44b3] font-medium select-none flex items-center gap-2">
+            Room Required
+          </span>
+        </label>
 
-                {showBudget && (
-                  <div className="space-y-4 pl-6">
-                    <div>
-                      <input
-                        type="number"
-                        {...register('budget', { required: showBudget })}
-                        className="w-full p-2 bg-white border-[#4c44b3] border-opacity-30 border-2 rounded"
-                        placeholder="Budget Amount"
-                      />
-                    </div>
-                    <div>
-                      <textarea
-                        {...register('budgetDetails', { required: showBudget })}
-                        className="w-full p-2 rounded bg-white border-[#4c44b3] border-opacity-30 border-2"
-                        rows={3}
-                        placeholder="Provide detailed budget breakdown"
-                      />
-                    </div>
-                  </div>
-                )}
+        {showRoom && (
+          <div className="pl-8 animate-fadeIn">
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <BsBuilding className="h-5 w-5 text-[#4c44b3]" />
               </div>
+              <select
+                {...register('roomNumber', { required: showRoom })}
+                className="w-full pl-10 pr-4 py-2 border-2 border-[#4c44b3] border-opacity-30 rounded-lg 
+                         focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white"
+              >
+                <option value="">Select a room</option>
+                {[
+                  "Club Room 1",
+                  "Club Room 2",
+                  "Club Room 3",
+                  "Club Room 4",
+                  "Multipurpose Hall",
+                  "Theatre",
+                  "Auditorium"
+                ].map((room) => (
+                  <option key={room} value={room}>{room}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        )}
+      </div>
 
-              {/* Room Section */}
-              <div className="space-y-4">
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    {...register('needsRoom')}
-                    className="form-checkbox text-[#4c44b3]"
-                  />
-                  <span className="text-[#4c44b3] font-medium">Room Required</span>
-                </label>
+      {/* Guest Passes Section */}
+      <div className="space-y-4">
+        <label className="flex items-center space-x-3 cursor-pointer group">
+          <div className="relative">
+            <input
+              type="checkbox"
+              {...register('needsGuestPasses')}
+              className="peer sr-only"
+            />
+            <div className="w-5 h-5 border-2 border-[#4c44b3] border-opacity-30 rounded 
+                         bg-white transition-all duration-300
+                         peer-checked:border-[#4c44b3] peer-checked:border-opacity-100
+                         peer-checked:bg-[#4c44b3] group-hover:border-opacity-50">
+            </div>
+            <div className="absolute top-[2px] left-[5px] opacity-0 
+                         peer-checked:opacity-100 transition-opacity duration-300 text-white">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" viewBox="0 0 54 44" fill="currentColor">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+              </svg>
+            </div>
+          </div>
+          <span className="text-[#4c44b3] font-medium select-none flex items-center gap-2">
+            Guest Passes Required
+          </span>
+        </label>
 
-                {showRoom && (
-                  <div className="pl-6">
-                    <select
-                      {...register('roomNumber', { required: showRoom })}
-                      className="w-full p-2 bg-white border-[#4c44b3] border-opacity-30 border-2 rounded"
-                    >
-                      <option value="">Select a room</option>
-                      {[
-                        "Club Room 1",
-                        "Club Room 2",
-                        "Club Room 3",
-                        "Club Room 4",
-                        "Multipurpose Hall",
-                        "Theatre",
-                        "Auditorium"
-                      ].map((room) => (
-                        <option key={room} value={room}>
-                          {room}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
+        {showGuestPasses && (
+          <div className="pl-8 animate-fadeIn">
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <HiOutlineUserGroup className="h-5 w-5 text-[#4c44b3]" />
               </div>
+              <input
+                type="number"
+                {...register('guestPassesCount', { required: showGuestPasses })}
+                className="w-full pl-10 pr-4 py-2 border-2 border-[#4c44b3] border-opacity-30 rounded-lg 
+                         focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white"
+                placeholder="Number of passes needed"
+              />
+            </div>
+          </div>
+        )}
+      </div>
 
-              {/* Guest Passes Section */}
-              <div className="space-y-4">
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    {...register('needsGuestPasses')}
-                    className="form-checkbox text-[#4c44b3]"
-                  />
-                  <span className="text-[#4c44b3] font-medium">Guest Passes Required</span>
-                </label>
+      {/* Date Section */}
+      <div className="space-y-2">
+        <label className="block text-[#4c44b3] font-medium text-sm">
+          Date <span className="text-red-500">*</span>
+        </label>
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <MdDateRange className="h-5 w-5 text-[#4c44b3]" />
+          </div>
+          <input
+            type="date"
+            {...register('date', { required: true })}
+            className="w-full pl-10 pr-4 py-2 border-2 border-[#4c44b3] border-opacity-30 rounded-lg 
+                     focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white"
+          />
+        </div>
+      </div>
 
-                {showGuestPasses && (
-                  <div className="pl-6">
-                    <input
-                      type="number"
-                      {...register('guestPassesCount', { required: showGuestPasses })}
-                      className="w-full p-2 bg-white border-[#4c44b3] border-opacity-30 border-2 rounded"
-                      placeholder="Number of passes needed"
-                    />
-                  </div>
-                )}
-              </div>
-
-              {/* Date */}
-              <div>
-                <label className="block mb-2 text-[#4c44b3] font-medium">
-                  Date <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="date"
-                  {...register('date', { required: true })}
-                  className="w-full p-2 bg-white border-[#4c44b3] border-opacity-30 border-2 rounded"
-                />
-              </div>
-
-              {/* Additional Requirements */}
-              <div>
-                <label className="block mb-2 text-[#4c44b3] font-medium">Additional Requirements or Documents</label>
-                <textarea
-                  {...register('additionalRequirements')}
-                  className="w-full p-2 bg-white border-[#4c44b3] border-opacity-30 border-2 rounded"
-                  rows={4}
-                  placeholder="Anything else you need - Sound System, IT support or something else. If you want to submit a document upload the document in the drive and share the drive link here."
-                />
-              </div>
+      {/* Additional Requirements */}
+      <div className="space-y-2">
+        <label className="block text-[#4c44b3] font-medium text-sm">
+          Additional Requirements or Documents
+        </label>
+        <div className="relative">
+          <div className="absolute left-3 top-3 pointer-events-none">
+            <FaRegFileAlt className="h-5 w-5 text-[#4c44b3]" />
+          </div>
+          <textarea
+            {...register('additionalRequirements')}
+            className="w-full pl-10 pr-4 py-2 border-2 border-[#4c44b3] border-opacity-30 rounded-lg 
+                     focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white"
+            rows={4}
+            placeholder="Anything else you need - Sound System, IT support or something else. If you want to submit a document upload the document in the drive and share the drive link here."
+          />
+        </div>
+      </div>
 
               {/* Terms Agreement */}
-              <div>
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    {...register('termsAgreed', { required: true })}
-                    className="form-checkbox text-[#4c44b3]"
-                  />
-                  <span className="text-[#4c44b3] font-medium">Our supervisor approves this request</span>
-                </label>
-                {errors.termsAgreed && (
-                  <span className="text-red-500 block mt-1">
-                    This must be filled up
-                  </span>
-                )}
-              </div>
+<div className="space-y-2">
+  <label className="flex items-center space-x-3 cursor-pointer group">
+    <div className="relative">
+      <input
+        type="checkbox"
+        {...register('termsAgreed', { required: true })}
+        className="peer sr-only"
+      />
+      <div className="w-5 h-5 border-2 border-[#4c44b3] border-opacity-30 rounded 
+                   bg-white transition-all duration-300
+                   peer-checked:border-[#4c44b3] peer-checked:border-opacity-100
+                   peer-checked:bg-[#4c44b3] group-hover:border-opacity-50">
+      </div>
+      <div className="absolute top-[2px] left-[5px] opacity-0 
+                   peer-checked:opacity-100 transition-opacity duration-300 text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" viewBox="0 0 54 44" fill="currentColor">
+          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+        </svg>
+      </div>
+    </div>
+    <span className="text-[#4c44b3] font-medium select-none flex items-center gap-2">
+      Our supervisor approves this request
+    </span>
+  </label>
+  {errors.termsAgreed && (
+    <span className="text-red-500 text-sm block pl-8">
+      Supervisor approval is required
+    </span>
+  )}
+</div>
 
-              {/* Submit Button */}
-              <div className='w-full flex justify-end pb-5'>
-                <button
-                  type="submit"
-                  className="bg-[#4c44b3] text-white px-6 py-2 rounded hover:bg-opacity-90 transition-colors"
-                >
-                  Submit
-                </button>
-              </div>
+{/* Submit Button */}
+<div className="w-full flex justify-end pb-5 pt-2">
+  <button
+    type="submit"
+    className="bg-[#4c44b3] text-white px-8 py-2.5 rounded-lg hover:bg-opacity-90 
+             transition-colors font-medium flex items-center gap-2 shadow-md
+             hover:shadow-lg active:scale-[0.98] transform duration-100"
+  >
+    Submit Proposal
+  </button>
+</div>
             </form>
           </div>
         </div>
 
-        {/* Sidebar Sections - 35% width */}
+        {/* Sidebar Sections */}
         <div className="w-[40%] flex flex-col gap-6">
           {/* Pending Events Section */}
-<div className="rounded-lg">
-  <div className='bg-white rounded-xl shadow-lg p-6'>
-    <h2 className="text-[#4c44b3] text-[1.3rem] font-bold">Pending Events</h2>
-    <p className="text-gray-500">Events that are not yet responded by the OCA</p>
-  </div>
-  <div className="mt-4 space-y-4">
-    {pendingRequests?.map((event) => (
-      <ProposalCard key={event._id} event={event} pendingRequestsRefetch={pendingRequestsRefetch}/>
-    ))}
+          <div className="rounded-lg">
+            <div className='bg-white rounded-xl p-6'>
+              <div className="flex justify-between items-center">
+                <h2 className="text-[#4c44b3] text-[1.3rem] font-bold">Pending Events</h2>
+                {pendingRequests?.length > 2 && (
+                  <Tooltip message="View all pending events">
+                    <label 
+                      htmlFor="pending-modal" 
+                      className="cursor-pointer text-[#4c44b3] hover:text-[#303972] transition-colors"
+                    >
+                      <HiOutlineViewList className="text-2xl" />
+                    </label>
+                  </Tooltip>
+                )}
+              </div>
+              <p className="text-gray-500">Events that are not yet responded by the OCA</p>
+            </div>
+            <div className="mt-4 space-y-4">
+              {visiblePendingRequests?.map((event, index) => (
+                <ProposalCard 
+                  key={event._id} 
+                  event={event} 
+                  pendingRequestsRefetch={pendingRequestsRefetch}
+                  borderColor={index % 2 === 0 ? 'rgb(247,102,74)' : 'rgb(249,185,48)'}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Previous Proposals Section */}
+          <div className="rounded-lg">
+            <div className='bg-white rounded-xl p-6'>
+              <div className="flex justify-between items-center">
+                <h2 className="text-[#4c44b3] text-[1.3rem] font-bold">Recent Proposals</h2>
+                {respondedRequests?.length > 2 && (
+                  <Tooltip message="View all proposals">
+                    <label 
+                      htmlFor="responded-modal" 
+                      className="cursor-pointer text-[#4c44b3] hover:text-[#303972] transition-colors"
+                    >
+                      <HiOutlineViewList className="text-2xl" />
+                    </label>
+                  </Tooltip>
+                )}
+              </div>
+              <p className="text-gray-500">Accepted or Rejected proposals with feedback</p>
+            </div>
+            <div className="mt-4 space-y-4">
+              {visibleRespondedRequests?.map((event, index) => (
+                <EventCard 
+                  key={event._id} 
+                  event={event}
+                  borderColor={index % 2 === 0 ? 'rgb(247,102,74)' : 'rgb(249,185,48)'}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* DaisyUI Modals */}
+<input type="checkbox" id="pending-modal" className="modal-toggle" />
+<div className="modal modal-bottom sm:modal-middle">
+  <div className="modal-box w-11/12 max-w-3xl bg-white relative">
+    <label htmlFor="pending-modal" className="btn btn-sm btn-circle bg-white hover:bg-gray-100 border-none text-gray-500 absolute right-4 top-4">✕</label>
+    <div className="border-b pb-4 mb-4">
+      <h3 className="font-bold text-[1.3rem] text-[#4c44b3]">All Pending Events</h3>
+    </div>
+    <div className="space-y-4 max-h-[60vh] overflow-y-auto">
+      {pendingRequests?.map((event, index) => (
+        <ProposalCard 
+          key={event._id} 
+          event={event} 
+          pendingRequestsRefetch={pendingRequestsRefetch}
+          borderColor={index % 2 === 0 ? 'rgb(247,102,74)' : 'rgb(249,185,48)'}
+        />
+      ))}
+    </div>
   </div>
 </div>
 
-{/* Previous Proposals Section */}
-<div className="rounded-lg">
-  <div className='bg-white rounded-xl shadow-lg p-6'>
-    <h2 className="text-[#4c44b3] text-[1.3rem] font-bold">Recent Proposals</h2>
-    <p className="text-gray-500">Accepted or Rejected proposals with feedback</p>
-  </div>
-  <div className="mt-4 space-y-4">
-    {respondedRequests?.map((event) => (
-      <EventCard key={event._id} event={event} />
-    ))}
+<input type="checkbox" id="responded-modal" className="modal-toggle" />
+<div className="modal modal-bottom sm:modal-middle">
+  <div className="modal-box w-full max-w-4xl bg-white relative">
+    <label htmlFor="responded-modal" className="btn btn-sm btn-circle bg-white hover:bg-gray-100 border-none text-gray-500 absolute right-4 top-4">✕</label>
+    <div className="border-b pb-4 mb-4">
+      <h3 className="font-bold text-[1.3rem] text-[#4c44b3]">All Recent Proposals</h3>
+    </div>
+    <div className="space-y-4 max-h-[60vh] overflow-y-auto">
+      {respondedRequests?.map((event, index) => (
+        <EventCard 
+          key={event._id} 
+          event={event}
+          borderColor={index % 2 === 0 ? 'rgb(247,102,74)' : 'rgb(249,185,48)'}
+        />
+      ))}
+    </div>
   </div>
 </div>
-        </div>
-      </div>
+
+
     </div>
-  );
-};
+      );
+    };
 
 export default EventPlanner;
 
 // ProposalCard for Pending Events
-const ProposalCard = ({ event , pendingRequestsRefetch}) => {
+const ProposalCard = ({ event , pendingRequestsRefetch, borderColor }) => {
   const handleDelete = (eventId) => {
     Swal.fire({
       title: 'Are you sure?',
@@ -346,8 +544,9 @@ const ProposalCard = ({ event , pendingRequestsRefetch}) => {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-4 mt-4  border-l-8 border-[#4c44b3]">
+    <div className="bg-white rounded-xl shadow-lg p-4 mt-4" style={{ borderLeft: `8px solid ${borderColor}` }}>
       <div className="flex items-start gap-4 relative">
+        
         <div className='text-[#4c44b3] font-bold absolute bottom-0 right-1 flex justify-center items-center gap-2 border border-gray-200 p-1 rounded-lg' >
           <span className='h-2 w-2 inline-block rounded-full bg-[#b6cc29]'></span>Pending
         </div>
@@ -390,10 +589,11 @@ const ProposalCard = ({ event , pendingRequestsRefetch}) => {
 };
 
 // EventCard for Previous Proposals
-const EventCard = ({ event }) => {
+const EventCard = ({ event, borderColor }) => {
   return (
-    <div className="bg-white rounded-xl shadow-lg p-4 mt-4 border-l-8 border-[#4c44b3] relative">
-      <span className={`w-3 h-3 rounded-full absolute top-4 right-4 ${event.response === 'Accepted' ? 'bg-green-500' : 'bg-red-500'}`}></span>
+    <div className="bg-white rounded-xl shadow-lg p-4 mt-4 relative" style={{ borderLeft: `8px solid ${borderColor}` }}>
+      <span className={`w-3 h-3 rounded-full absolute right-2 top-2 ${event.response === 'Accepted' ? 'bg-green-500' : 'bg-red-500'}`}></span>
+
       <div className="flex items-start gap-4">
         
         <div className="flex-1">

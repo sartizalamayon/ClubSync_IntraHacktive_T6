@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Context/AuthProvider";
 import axios from "axios";
 import { MdNotificationsActive } from "react-icons/md";
-import icon from "../../../public/arrow.ong.png";
 import event from "../../../public/event.png";
 import budget from "../../../public/cash.png";
 import pass from "../../../public/icons8-pass-50.png";
@@ -59,11 +58,8 @@ const DashboardHome = () => {
           {/* Background SVG */}
           <div className="relative">
             <svg
-              width="full"
-              height="140px"
-              fill="none"
-              // xmlns="http://www.w3.org/2000/svg"
-            >
+            className="w-full"
+              >
               <path
                 d="M20 0L997 0C1008.05 0 1017 8.95 1017 20L1017 140L0 140L0 20C0 8.95 8.95 0 20 0Z"
                 fill="#4D44B5"
@@ -73,9 +69,9 @@ const DashboardHome = () => {
 
           {/* Profile image and name */}
           <div
-            data-aos="fade-up"
-            data-aos-duration="1000"
-            className="relative -mt-4 ml-2 flex items-center"
+            // data-aos="fade-up"
+            // data-aos-duration="1000"
+            className="relative -mt-6 flex items-center"
           >
             <img
               className="rounded-full h-28"
@@ -94,7 +90,7 @@ const DashboardHome = () => {
             <div
               data-aos="fade-down"
               data-aos-duration="1000"
-              className="flex justify-around p-2 my-4 pt-12  shadow-lg"
+              className="flex justify-around items-center p-2 my-4  bg-white rounded-xl"
             >
               <div className="flex justify-center items-center ">
                 <div className="w-[70px] h-[70px]">
@@ -133,9 +129,7 @@ const DashboardHome = () => {
                 </div>
                 <div className="text-[#303972] pl-2">
                   <h1 className="text-lg font-normal ">Total Party</h1>
-                  <h1 className=" text-4xl font-bold text-center">
-                    66
-                  </h1>
+                  <h1 className=" text-4xl font-bold text-center">66</h1>
                 </div>
               </div>
             </div>
@@ -149,7 +143,7 @@ const DashboardHome = () => {
             <table
               data-aos="fade-up"
               data-aos-duration="1000"
-              className="w-full  text-sm text-left rtl:text-right text-gray-500  dark:text-gray-400"
+              className="w-full  text-sm text-left rtl:text-right bg-white rounded-xl"
             >
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 "></thead>
               <tbody>
@@ -221,10 +215,10 @@ const DashboardHome = () => {
         </div>
 
         <div data-aos="fade-up" data-aos-duration="1000" className="col-span-1">
-          <div>
+          <div className="pl-5">
             <h1 className="text-2xl font-bold text-[#303972]">Announcement</h1>
           </div>
-          <div className="shadow-lg m-4 p-4">
+          <div className="bg-white rounded-xl m-4 p-4">
             <img className="h-10" src={qut} alt="" />
             <h1 className="p-2 text-sm font-normal">
               Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quam,

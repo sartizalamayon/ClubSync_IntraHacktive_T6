@@ -15,7 +15,7 @@ const DashboardHome = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/dashboard-info/${user.email}`)
+      .get(`http://localhost:3000/dashboard-info/${user?.email}`)
       .then((res) => {
         setData(res.data);
       });
@@ -133,9 +133,7 @@ const DashboardHome = () => {
                 </div>
                 <div className="text-[#303972] pl-2">
                   <h1 className="text-lg font-normal ">Total Party</h1>
-                  <h1 className=" text-4xl font-bold text-center">
-                    66
-                  </h1>
+                  <h1 className=" text-4xl font-bold text-center">66</h1>
                 </div>
               </div>
             </div>

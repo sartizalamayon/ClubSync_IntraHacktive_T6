@@ -4,6 +4,7 @@ import Root from "../Layout/Root";
 import DashboardHome from "../Pages/Dashboard/DashboardHome";
 import Home from "../Pages/Home/Home";
 import Login from "../Pages/Login/Login";
+import EventPlanner from "../Pages/ClubPages/EventPlanner/EventPlanner";
 import Calendar from "../Pages/Shared/Calendar";
 import PrivateRoute from "./PrivateRoute";
 import Approval from "../Pages/Dashboard/OCA/Approval";
@@ -34,7 +35,11 @@ export const router = createBrowserRouter([
         path: '/dashboard',
         element: <PrivateRoute><DashboardHome/></PrivateRoute>
       },
-      
+      {
+        path: '/dashboard/event-planner',
+        element: <PrivateRoute><EventPlanner/></PrivateRoute>
+      }
+      ,
       // Club dashboard
       {
         path: '/dashboard/chat',

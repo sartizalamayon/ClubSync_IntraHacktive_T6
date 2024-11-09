@@ -12,7 +12,7 @@ const Calendar = () => {
       {/* nav for this component */}
       <div className="navbar p-0 mt-[-20px]">
         <div className="flex-1">
-          <a className="text-3xl font-bold text-[#303972] ">Events</a>
+          <a className="text-3xl font-bold text-[#303972] ">Central Calendar</a>
         </div>
         <div className="flex-none gap-2">
           <div className="form-control">

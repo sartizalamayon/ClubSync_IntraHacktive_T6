@@ -12,7 +12,11 @@ import './Dash.css';
 const Dashboard = () => {
   const { user, logOut } = useContext(AuthContext);
   const role = user?.email === 'oca@bracu.ac.bd' ? 'oca' : 'club';
-  console.log(role);
+  const email = user?.email;
+  const username = email.split('@')[0];
+  const uppercaseUsername = username.toUpperCase();
+
+
 
   return (
     <div>
@@ -61,7 +65,7 @@ const Dashboard = () => {
             {role === "club" && (
               <>
                 <li className="text-center text-4xl font-semibold text-white">
-                  Club Panel
+                  {uppercaseUsername}
                 </li>
                 <li>
                   <NavLink to={"/dashboard"}>

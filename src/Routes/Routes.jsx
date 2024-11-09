@@ -1,15 +1,17 @@
 import { createBrowserRouter } from "react-router-dom";
 import Dashboard from "../Layout/Dashboard";
 import Root from "../Layout/Root";
+import EventPlanner from "../Pages/ClubPages/EventPlanner/EventPlanner";
+import Chat from "../Pages/Dashboard/Club/Chat";
 import DashboardHome from "../Pages/Dashboard/DashboardHome";
+import Approval from "../Pages/Dashboard/OCA/Approval";
+import ChatWithClub from "../Pages/Dashboard/OCA/ChatWithClub";
+import ClubInfo from "../Pages/Dashboard/OCA/ClubInfo";
+import OcaChat from "../Pages/Dashboard/OCA/OcaChat";
 import Home from "../Pages/Home/Home";
 import Login from "../Pages/Login/Login";
-import EventPlanner from "../Pages/ClubPages/EventPlanner/EventPlanner";
 import Calendar from "../Pages/Shared/Calendar";
 import PrivateRoute from "./PrivateRoute";
-import Approval from "../Pages/Dashboard/OCA/Approval";
-import ClubInfo from "../Pages/Dashboard/OCA/ClubInfo";
-import Chat from "../Pages/Dashboard/Club/Chat";
 
 export const router = createBrowserRouter([
   {
@@ -53,6 +55,20 @@ export const router = createBrowserRouter([
       {
         path: '/dashboard/club-info',
         element: <PrivateRoute><ClubInfo/></PrivateRoute>
+      },
+      // chat routes
+      {
+        path: '/dashboard/oca-chat',
+        element: <PrivateRoute><OcaChat/></PrivateRoute>,
+        children: [{
+          path: '/dashboard/oca-chat',
+          element: <ChatWithClub/>
+        },
+        {
+          path: '/dashboard/oca-chat/:email',
+          element: <ChatWithClub/>
+        }
+      ]
       },
       // shared
       {

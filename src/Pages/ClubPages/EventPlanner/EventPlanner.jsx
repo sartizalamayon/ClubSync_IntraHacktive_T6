@@ -275,7 +275,7 @@ const EventPlanner = () => {
         </div>
 
         {/* Sidebar Sections - 35% width */}
-        <div className="w-[40%] flex flex-col gap-6 pt-[4.3rem]">
+        <div className="w-[40%] flex flex-col gap-6">
           {/* Pending Events Section */}
 <div className="rounded-lg">
   <div className='bg-white rounded-xl shadow-lg p-6'>

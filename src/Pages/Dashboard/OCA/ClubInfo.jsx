@@ -52,10 +52,7 @@ const ClubInfo = () => {
             </div>
           </div>
           
-          {/* Notification */}
-          <span className="p-3 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-            <MdNotificationsActive className="text-[#4c44b3] h-5 w-5" />
-          </span>
+          
 
           {/* Profile */}
           <div className="dropdown dropdown-end">
@@ -76,7 +73,7 @@ const ClubInfo = () => {
       </div>
 
       {/* Club Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
         {filteredClubs.map((club) => (
           <Link 
             to={`/dashboard/club-info/${club._id}`} 
@@ -122,7 +119,7 @@ const ClubInfo = () => {
                 
                 {/* View Details Button */}
                 <div className="mt-4 flex justify-end">
-                  <span className="text-[#4c44b3] text-sm font-medium group-hover:underline">
+                  <span className="text-[#303472] text-sm font-medium group-hover:underline">
                     View Details →
                   </span>
                 </div>

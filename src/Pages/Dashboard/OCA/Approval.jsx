@@ -109,7 +109,8 @@ const Approval = () => {
         </div>
         <div className="flex-none gap-2">
           <div className="form-control">
-            <label className="input input-bordered flex items-center gap-2 rounded-full">
+            {/* Make this search functional */}
+            <label className="input input-bordered flex items-center gap-2 rounded-full bg-white">
               <input type="text" className="grow " placeholder="Search" />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -125,9 +126,9 @@ const Approval = () => {
               </svg>
             </label>
           </div>
-          <span className="p-3 bg-white rounded-3xl">
+          {/* <span className="p-3 bg-white rounded-3xl">
             <MdNotificationsActive />
-          </span>
+          </span> */}
           <div className="dropdown dropdown-end">
             <div
               tabIndex={0}
@@ -137,7 +138,7 @@ const Approval = () => {
               <div className="w-10 rounded-full">
                 <img
                   alt="Tailwind CSS Navbar component"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW710hPlb48q-g88rWvxavK9XmOeFOXU1ZMA&s"
                 />
               </div>
             </div>
@@ -146,7 +147,7 @@ const Approval = () => {
       </div>
       <div className="bg-white p-8 rounded-xl mt-2">
         <div className="overflow-x-auto">
-          <table className="table table-zebra">
+          <table className="table">
             {/* head */}
             <thead className="text-[12px] font-semibold text-[#303972]">
               <tr>
@@ -160,7 +161,7 @@ const Approval = () => {
             <tbody>
               {/* row 1 */}
               {allPendingRequests.map((event, index) => (
-                <tr key={index}>
+                <tr key={index} className="bg-white">
                 <th>1</th>
                 <td className="text-lg font-semibold text-[#303972]">
                  {event?.title}
@@ -175,7 +176,7 @@ const Approval = () => {
                     <BsEye />
                   </button>
                   {/* accept */}
-                  <button onClick={() => handleAccept(event._id)} className="btn bg-[#FB7D5B] rounded-xl text-white font-normal ml-2">
+                  <button onClick={() => handleAccept(event._id)} className="btn bg-[#303972]  rounded-xl text-white font-normal ml-2">
                     Accept
                   </button>
                   {/* - reject */}

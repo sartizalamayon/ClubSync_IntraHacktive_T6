@@ -37,9 +37,6 @@ const ClubInfo = () => {
             </label>
           </div>
           {/* Notification and Profile */}
-          <span className="p-3 bg-white rounded-3xl">
-            <MdNotificationsActive />
-          </span>
           <div className="dropdown dropdown-end">
             <div
               tabIndex={0}
@@ -49,7 +46,7 @@ const ClubInfo = () => {
               <div className="w-10 rounded-full">
                 <img
                   alt="User Avatar"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW710hPlb48q-g88rWvxavK9XmOeFOXU1ZMA&s"
                 />
               </div>
             </div>

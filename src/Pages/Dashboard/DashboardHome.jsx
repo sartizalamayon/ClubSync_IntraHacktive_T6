@@ -1,13 +1,12 @@
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../Context/AuthProvider";
 import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 import { MdNotificationsActive } from "react-icons/md";
-import icon from "../../../public/arrow.ong.png";
-import event from "../../../public/event.png";
 import budget from "../../../public/cash.png";
+import event from "../../../public/event.png";
 import pass from "../../../public/icons8-pass-50.png";
 import party from "../../../public/party.png";
 import qut from "../../../public/quat.png";
+import { AuthContext } from "../../Context/AuthProvider";
 const DashboardHome = () => {
   const { user } = useContext(AuthContext);
   const [data, setData] = useState([]);

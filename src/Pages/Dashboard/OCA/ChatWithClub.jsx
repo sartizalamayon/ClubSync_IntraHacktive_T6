@@ -16,8 +16,7 @@ const ChatWithClub = () => {
   const club = clubInfo.find(club => club.email == email);
   const [text, setText] = useState('');
 
-  const club = clubInfo.find((club) => club.email == email);
-  const [text, setText] = useState("");
+
 
   // Reference for the chat container to scroll to the latest message
   const chatContainerRef = useRef(null);

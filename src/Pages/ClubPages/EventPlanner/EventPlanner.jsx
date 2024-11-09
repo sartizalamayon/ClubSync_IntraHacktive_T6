@@ -6,6 +6,7 @@ import { AuthContext } from '../../../Context/AuthProvider';
 import Swal from 'sweetalert2';
 import usePendingRequests from '../../../hooks/usePendingRequests';
 import useRespondedRequests from '../../../hooks/useRespondedRequests';
+import { MdNotificationsActive } from 'react-icons/md';
 
 const EventPlanner = () => {
   const {
@@ -67,11 +68,35 @@ const EventPlanner = () => {
 
 
   return (
-    <div className="min-h-screen bg-[rgb(243,244,245)]">
+    <div>
+       <div className="navbar p-0 mt-[-20px]">
+        <div className="flex-1">
+          <a className="text-3xl font-bold text-[#303972] ">Create a Proposal</a>
+        </div>
+        <div className="flex-none gap-2">
+          
+          <span className="p-3 bg-white rounded-3xl">
+            <MdNotificationsActive />
+          </span>
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle avatar"
+            >
+              <div className="w-10 rounded-full">
+                <img
+                  alt="Tailwind CSS Navbar component"
+                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="flex gap-8">
         {/* Main Form Section - 60% width */}
         <div className="w-[55%]">
-          <h1 className="text-3xl font-semibold mb-8 text-[#4c44b3] text">Request for Events</h1>
           
           <div className="bg-white rounded-lg shadow-lg">
             <h2 className="text-lg font-semibold mb-6 bg-[#4c44b3] text-white p-3 rounded-tr-xl rounded-tl-xl w-full pl-4">Details</h2>

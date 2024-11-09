@@ -39,7 +39,7 @@ export const router = createBrowserRouter([
         path: '/dashboard/event-planner',
         element: <PrivateRoute><EventPlanner/></PrivateRoute>
       }
-      
+      ,
       // Club dashboard
       {
         path: '/dashboard/chat',

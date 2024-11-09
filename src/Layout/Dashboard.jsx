@@ -113,7 +113,7 @@ const Dashboard = () => {
           </ul>
         </div>
         <div className="p-[30px] bg-[rgb(243,244,255)] w-full">
-          <div className="p-[30px] w-full  min-h-screen bg-[#F3F4FF]">
+          <div className="w-full  min-h-screen bg-[#F3F4FF]">
             <Outlet />
           </div>
         </div>

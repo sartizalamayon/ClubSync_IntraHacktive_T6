@@ -141,7 +141,7 @@ const Chat = () => {
                   {msg.content}
                 </div>
                 <div className="chat-footer opacity-100">
-                  <time className="text-xs opacity-50">{msg.time}</time>
+                  <time className="text-xs opacity-50">{msg.date} | {msg.time}</time>
                 </div>
               </div>
             ) : (
@@ -160,7 +160,7 @@ const Chat = () => {
                   {msg.content}
                 </div>
                 <div className="chat-footer opacity-100">
-                  <time className="text-xs opacity-50">{msg.time}</time>
+                  <time className="text-xs opacity-50">{msg.date} | {msg.time} </time>
                 </div>
               </div>
             )
@@ -172,7 +172,7 @@ const Chat = () => {
           <input
             onChange={(e) => setText(e.target.value)}
             value={text}
-            className="input input-bordered join-item text-[14px] font-normal text-[#A098AE] w-[100%] rounded-2xl"
+            className="input input-bordered join-item text-[14px] font-normal text-black w-[100%] rounded-2xl"
             placeholder="Write your message..."
           />
           <button onClick={handleSendMessage} className="btn join-item rounded-r-full text-white bg-[#4D44B5]">

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useContext, useEffect, useState, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { BiSend } from "react-icons/bi";
 import { FaVideo } from "react-icons/fa";
 import { useParams } from "react-router-dom";
@@ -108,7 +108,7 @@ const ChatWithClub = () => {
                   {msg.content}
                 </div>
                 <div className="chat-footer opacity-100">
-                  <time className="text-xs opacity-50">{msg.time}</time>
+                  <time className="text-xs opacity-50">{msg.time} | {msg.date}</time>
                 </div>
               </div>
             ) : (

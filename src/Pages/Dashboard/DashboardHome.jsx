@@ -88,8 +88,12 @@ const DashboardHome = () => {
           </div>
 
           {/* Additional content below */}
-          <div className="m-2 border  overflow-x-auto shadow-lg">
-            <table className="w-full  text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <div className="m-2 border  overflow-x-auto shadow-lg  ">
+            <table
+              data-aos="fade-up"
+              data-aos-duration="1000"
+              className="w-full  text-sm text-left rtl:text-right text-gray-500  dark:text-gray-400"
+            >
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
                 <tr>
                   <th scope="col" className="px-6 py-2 text-2xl font-semibold">
@@ -101,7 +105,10 @@ const DashboardHome = () => {
                   <th scope="col" className="px-6 py-3 text-2xl font-semibold">
                     Organize By
                   </th>
-                  <th scope="col" className="px-6 py-3 text-2xl font-semibold"></th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-2xl font-semibold"
+                  ></th>
                 </tr>
               </thead>
               <tbody>
@@ -125,14 +132,21 @@ const DashboardHome = () => {
           </div>
           <section>
             {/* Analytics */}
-            <div className="flex justify-between p-2 my-4 pt-12  shadow-lg">
+            <div
+              data-aos="fade-down"
+              data-aos-duration="1000"
+             
+              className="flex justify-between p-2 my-4 pt-12  shadow-lg"
+            >
               <div className="flex justify-center items-center space-x-2">
                 <div className="w-12 rounded-full">
                   <img src={event} alt="" />
                 </div>
                 <div>
                   <h1 className="text-xl font-bold">Total Event</h1>
-                  <h1 className=" text-xl font-bold text-center">{events.length}</h1>
+                  <h1 className=" text-xl font-bold text-center">
+                    {events.length}
+                  </h1>
                 </div>
               </div>
               <div className="flex justify-center items-center  space-x-2">

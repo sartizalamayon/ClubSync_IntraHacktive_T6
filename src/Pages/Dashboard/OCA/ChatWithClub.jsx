@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { BiSend } from "react-icons/bi";
 import { FaVideo } from "react-icons/fa";
 import { useParams } from "react-router-dom";
@@ -10,33 +10,48 @@ const ChatWithClub = () => {
   const { email } = useParams();
   const [clubInfo, setClubInfo] = useState([]);
   const [messages, setMessage] = useState([]);
-  const username = email.split("@")[0];
-  const uppercaseUsername = username.toUpperCase();
-  const club = clubInfo.find(club => club.email == email);
-  const [text, setText] = useState('');
+  const username = email?.split("@")[0];
+  const uppercaseUsername = username?.toUpperCase();
+  const club = clubInfo.find((club) => club.email == email);
+  const [text, setText] = useState("");
+
+  // Reference for the chat container to scroll to the latest message
+  const chatContainerRef = useRef(null);
+
   const handleSendMessage = () => {
     const messageInfo = {
-        senderEmail: "oca@bracu.ac.bd",
-        receiverEmail: email,
-        content: text,
-        date: new Date().toISOString().split("T")[0], 
-        time: new Date().toLocaleTimeString("en-US", { hour12: false }) 
-      };
-      axios.post("http://localhost:3000/send-message", messageInfo).then((res) => {
+      senderEmail: "oca@bracu.ac.bd",
+      receiverEmail: email,
+      content: text,
+      date: new Date().toISOString().split("T")[0],
+      time: new Date().toLocaleTimeString("en-US", { hour12: false }),
+    };
+    axios
+      .post("http://localhost:3000/send-message", messageInfo)
+      .then((res) => {
         setMessage([...messages, messageInfo]);
-        setText('');
-        console.log(res.data)
+        setText("");
+        console.log(res.data);
       });
-  }
+  };
+
+  // Scroll to the latest message when messages change
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   // fetch chat messages from API
   useEffect(() => {
     axios.get(`http://localhost:3000/get-messages/${email}`).then((res) => {
       setMessage(res.data);
     });
     axios.get("http://localhost:3000/get-club-list").then((res) => {
-        setClubInfo(res.data);
-      });
+      setClubInfo(res.data);
+    });
   }, [email, setLoading]);
+
   return (
     <div>
       <div className=" bg-white p-8 rounded-2xl h-full">
@@ -75,10 +90,10 @@ const ChatWithClub = () => {
         </div>
         <div className="divider"></div>
         {/* chat bubble */}
-        <div className="overflow-scroll h-[220px]">
+        <div className="overflow-scroll h-[220px]" ref={chatContainerRef}>
           {messages?.map((msg, index) =>
             msg.senderEmail == "oca@bracu.ac.bd" ? (
-                // oca
+              // oca
               <div key={index} className="chat chat-start">
                 <div className="chat-image avatar">
                   <div className="w-10 rounded-full">
@@ -97,7 +112,7 @@ const ChatWithClub = () => {
                 </div>
               </div>
             ) : (
-                // club
+              // club
               <div key={index} className="chat chat-end">
                 <div className="chat-image avatar">
                   <div className="w-10 rounded-full">
@@ -118,16 +133,21 @@ const ChatWithClub = () => {
             )
           )}
         </div>
-        {/* end chat bubbl */}
+        {/* end chat bubble */}
         <div className="divider"></div>
         {/* input for message */}
         <div className="join w-full">
           <input
-          onChange={(e)=> setText(e.target.value)}
+            onChange={(e) => setText(e.target.value)}
+            value={text}
             className="input input-bordered join-item text-[14px] font-normal text-[black] w-[100%] rounded-2xl"
             placeholder="Write your message..."
           />
-          <button onClick={()=> handleSendMessage()} type="submit" className="btn join-item rounded-r-full text-white bg-[#4D44B5]">
+          <button
+            onClick={() => handleSendMessage()}
+            type="submit"
+            className="btn join-item rounded-r-full text-white bg-[#4D44B5]"
+          >
             Send <BiSend />
           </button>
         </div>

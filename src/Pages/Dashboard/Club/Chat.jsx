@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { BiSend } from "react-icons/bi";
 import { FaVideo } from "react-icons/fa";
 import { MdNotificationsActive } from "react-icons/md";
@@ -8,30 +8,41 @@ import { AuthContext } from "../../../Context/AuthProvider";
 const Chat = () => {
   const { user } = useContext(AuthContext);
   const [messages, setMessage] = useState([]);
+  const [text, setText] = useState('');
+  const chatContainerRef = useRef(null);
+
   const username = user?.email.split("@")[0];
   const uppercaseUsername = username.toUpperCase();
-  const [text, setText] = useState('');
+
   const handleSendMessage = () => {
     const messageInfo = {
-        senderEmail: user?.email,
-        receiverEmail: "oca@bracu.ac.bd",
-        content: text,
-        date: new Date().toISOString().split("T")[0], 
-        time: new Date().toLocaleTimeString("en-US", { hour12: false }) 
-      };
-      axios.post("http://localhost:3000/send-message", messageInfo).then((res) => {
-        setMessage([...messages, messageInfo]);
-        setText('');
-        console.log(res.data)
-      });
-  }
+      senderEmail: user?.email,
+      receiverEmail: "oca@bracu.ac.bd",
+      content: text,
+      date: new Date().toISOString().split("T")[0],
+      time: new Date().toLocaleTimeString("en-US", { hour12: false })
+    };
+    
+    axios.post("http://localhost:3000/send-message", messageInfo).then((res) => {
+      setMessage((prevMessages) => [...prevMessages, messageInfo]);
+      setText('');
+    });
+  };
+
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/get-messages/${user?.email}`)
+    axios.get(`http://localhost:3000/get-messages/${user?.email}`)
       .then((res) => {
         setMessage(res.data);
       });
   }, [user?.email]);
+
+  // Scroll to the bottom when messages change
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   return (
     <div>
       {/* header */}
@@ -42,7 +53,7 @@ const Chat = () => {
         <div className="flex-none gap-2">
           <div className="form-control">
             <label className="input input-bordered flex items-center gap-2 rounded-full">
-              <input type="text" className="grow " placeholder="Search" />
+              <input type="text" className="grow" placeholder="Search" />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 16 16"
@@ -105,17 +116,16 @@ const Chat = () => {
               >
                 <div className="indicator">
                   <FaVideo />
-                  {/* <span className="badge badge-sm indicator-item">8</span> */}
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div className="divider"></div>
-        {/* chat buttle */}
-        <div className="overflow-scroll h-[220px]">
+        {/* chat bubble */}
+        <div ref={chatContainerRef} className="overflow-scroll h-[220px]">
           {messages?.map((msg, index) =>
-            msg.senderEmail == "oca@bracu.ac.bd" ? (
+            msg.senderEmail === "oca@bracu.ac.bd" ? (
               // oca
               <div key={index} className="chat chat-start">
                 <div className="chat-image avatar">
@@ -156,16 +166,16 @@ const Chat = () => {
             )
           )}
         </div>
-        {/* end chat bubbl */}
         <div className="divider"></div>
         {/* input for message */}
         <div className="join w-full">
           <input
-           onChange={(e)=> setText(e.target.value)}
+            onChange={(e) => setText(e.target.value)}
+            value={text}
             className="input input-bordered join-item text-[14px] font-normal text-[#A098AE] w-[100%] rounded-2xl"
             placeholder="Write your message..."
           />
-          <button onClick={()=>{ handleSendMessage(); }} className="btn join-item rounded-r-full text-white bg-[#4D44B5]">
+          <button onClick={handleSendMessage} className="btn join-item rounded-r-full text-white bg-[#4D44B5]">
             Send <BiSend />
           </button>
         </div>

@@ -231,8 +231,8 @@ const DashboardHome = () => {
               rem? Blanditiis quod suscipit nobis sapiente doloribus similique
               facere eum neque.
             </h1>
-            <div className="flex items-center">
-              <img className="h-12" src={data.photo_url} alt="" />
+            <div className="flex items-center space-x-2">
+              <img className="h-12 rounded-full" src={data.photo_url} alt="" />
               <div>
                 <h1 className="text-lg font-semibold text-[#303972]">
                   {data.name}

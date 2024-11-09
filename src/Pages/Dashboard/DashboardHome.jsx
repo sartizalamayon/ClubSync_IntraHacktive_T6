@@ -7,6 +7,10 @@ const DashboardHome = () => {
   useEffect(() => {
     axios.get(`http://localhost:3000/`);
   }, []);
+
+  
+
+
   return (
     <div className="flex flex-col fixed border min-h-screen my-auto">
       <div className="">
@@ -62,12 +66,10 @@ const DashboardHome = () => {
           />
         </svg>
       </div>
-      <div className="pt-24">
-        
-      </div>
+      <div className="pt-24"></div>
       <div className="p-6">
-      <h1 className="text-3xl font-bold">Walter White</h1>
-      <p className="font-bold">Student</p>
+        <h1 className="text-3xl font-bold">Walter White</h1>
+        <p className="font-bold">Student</p>
       </div>
       <div className="grid grid-cols-4 pl-32">
         <h1>Parents</h1>
@@ -81,7 +83,6 @@ const DashboardHome = () => {
         <p>43857325892348</p>
         <p>kiss@gmail.com</p>
       </div>
-      
     </div>
   );
 };

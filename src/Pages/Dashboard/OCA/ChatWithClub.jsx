@@ -10,8 +10,8 @@ const ChatWithClub = () => {
   const { email } = useParams();
   const [clubInfo, setClubInfo] = useState([]);
   const [messages, setMessage] = useState([]);
-  const username = email.split("@")[0];
-  const uppercaseUsername = username.toUpperCase();
+  const username = email?.split("@")[0];
+  const uppercaseUsername = username?.toUpperCase();
   const club = clubInfo.find(club => club.email == email);
   const [text, setText] = useState('');
   const handleSendMessage = () => {

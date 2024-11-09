@@ -1,12 +1,17 @@
 import dayGridPlugin from "@fullcalendar/daygrid";
 import FullCalendar from "@fullcalendar/react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { MdNotificationsActive } from "react-icons/md";
 import "../../index.css";
 
 const Calendar = () => {
-  const handleDateClick = (info) => {
-    alert(info);
-  };
+  const [acceptedEvents, setAcceptedEvents] = useState([]);
+  console.log(acceptedEvents)
+  useEffect(()=>{
+    axios.get('http://localhost:3000/accepted-events')
+     .then(res => setAcceptedEvents(res.data))
+  },[])
   return (
     <div className="">
       {/* nav for this component */}
@@ -57,17 +62,14 @@ const Calendar = () => {
           <FullCalendar
             plugins={[dayGridPlugin]}
             initialView="dayGridMonth"
-            dateClick={(dateInfo) => handleDateClick(dateInfo)}
+            
             weekends={true}
             headerToolbar={{
               left: "prev,next today",
               center: "title",
               right: "dayGridMonth",
             }}
-            events={[
-              { title: "BUCC", date: "2024-11-01" },
-              { title: "BUEDF", date: "2024-11-01" },
-            ]}
+            events={acceptedEvents}
           />
         </div>
         {/* notice */}

@@ -59,7 +59,7 @@ const Calendar = () => {
         <div className="w-[30%] mt-5 gap-3 flex flex-col">
             {/* heading */}
           <div>
-            <h1 className="bg-white p-10 text-center text-2xl font-bold rounded-2xl text-[#363B64]">Our Events</h1>
+            <h1 className="bg-white p-10 text-center text-2xl font-bold rounded-2xl text-[#363B64]">Scheduled Events</h1>
           </div>
           <div>
             <h1 className="bg-white p-10 text-center text-2xl font-bold rounded-2xl border-l-[30px] border-orange-500 text-[#363B64]">Pending Events</h1>

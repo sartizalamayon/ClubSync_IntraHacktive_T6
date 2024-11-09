@@ -13,7 +13,21 @@ const ChatWithClub = () => {
   const username = email.split("@")[0];
   const uppercaseUsername = username.toUpperCase();
   const club = clubInfo.find(club => club.email == email);
-  
+  const [text, setText] = useState('');
+  const handleSendMessage = () => {
+    const messageInfo = {
+        senderEmail: "oca@bracu.ac.bd",
+        receiverEmail: email,
+        content: text,
+        date: new Date().toISOString().split("T")[0], 
+        time: new Date().toLocaleTimeString("en-US", { hour12: false }) 
+      };
+      axios.post("http://localhost:3000/send-message", messageInfo).then((res) => {
+        setMessage([...messages, messageInfo]);
+        setText('');
+        console.log(res.data)
+      });
+  }
   // fetch chat messages from API
   useEffect(() => {
     axios.get(`http://localhost:3000/get-messages/${email}`).then((res) => {
@@ -60,8 +74,8 @@ const ChatWithClub = () => {
           </div>
         </div>
         <div className="divider"></div>
-        {/* chat buttle */}
-        <div className="overflow-scroll h-[200px]">
+        {/* chat bubble */}
+        <div className="overflow-scroll h-[220px]">
           {messages?.map((msg, index) =>
             msg.senderEmail == "oca@bracu.ac.bd" ? (
                 // oca
@@ -78,7 +92,7 @@ const ChatWithClub = () => {
                 <div className="chat-bubble bg-[#F5F5F5] text-lg text-[#303972]">
                   {msg.content}
                 </div>
-                <div className="chat-footer opacity-50">
+                <div className="chat-footer opacity-100">
                   <time className="text-xs opacity-50">{msg.time}</time>
                 </div>
               </div>
@@ -97,7 +111,7 @@ const ChatWithClub = () => {
                 <div className="chat-bubble bg-[#4D44B5] text-white text-lg">
                   {msg.content}
                 </div>
-                <div className="chat-footer opacity-50">
+                <div className="chat-footer opacity-100">
                   <time className="text-xs opacity-50">{msg.time}</time>
                 </div>
               </div>
@@ -109,10 +123,11 @@ const ChatWithClub = () => {
         {/* input for message */}
         <div className="join w-full">
           <input
-            className="input input-bordered join-item text-[14px] font-normal text-[#A098AE] w-[100%] rounded-2xl"
+          onChange={(e)=> setText(e.target.value)}
+            className="input input-bordered join-item text-[14px] font-normal text-[black] w-[100%] rounded-2xl"
             placeholder="Write your message..."
           />
-          <button className="btn join-item rounded-r-full text-white bg-[#4D44B5]">
+          <button onClick={()=> handleSendMessage()} type="submit" className="btn join-item rounded-r-full text-white bg-[#4D44B5]">
             Send <BiSend />
           </button>
         </div>

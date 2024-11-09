@@ -1,9 +1,37 @@
-import React from "react";
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
 import { BiSend } from "react-icons/bi";
 import { FaVideo } from "react-icons/fa";
 import { MdNotificationsActive } from "react-icons/md";
+import { AuthContext } from "../../../Context/AuthProvider";
 
 const Chat = () => {
+  const { user } = useContext(AuthContext);
+  const [messages, setMessage] = useState([]);
+  const username = user?.email.split("@")[0];
+  const uppercaseUsername = username.toUpperCase();
+  const [text, setText] = useState('');
+  const handleSendMessage = () => {
+    const messageInfo = {
+        senderEmail: user?.email,
+        receiverEmail: "oca@bracu.ac.bd",
+        content: text,
+        date: new Date().toISOString().split("T")[0], 
+        time: new Date().toLocaleTimeString("en-US", { hour12: false }) 
+      };
+      axios.post("http://localhost:3000/send-message", messageInfo).then((res) => {
+        setMessage([...messages, messageInfo]);
+        setText('');
+        console.log(res.data)
+      });
+  }
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/get-messages/${user?.email}`)
+      .then((res) => {
+        setMessage(res.data);
+      });
+  }, [user?.email]);
   return (
     <div>
       {/* header */}
@@ -85,62 +113,61 @@ const Chat = () => {
         </div>
         <div className="divider"></div>
         {/* chat buttle */}
-        <div className="overflow-scroll h-[200px]">
-          <div className="chat chat-start">
-            <div className="chat-image avatar">
-              <div className="w-10 rounded-full">
-                <img
-                  alt="Tailwind CSS chat bubble component"
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW710hPlb48q-g88rWvxavK9XmOeFOXU1ZMA&s"
-                />
+        <div className="overflow-scroll h-[220px]">
+          {messages?.map((msg, index) =>
+            msg.senderEmail == "oca@bracu.ac.bd" ? (
+              // oca
+              <div key={index} className="chat chat-start">
+                <div className="chat-image avatar">
+                  <div className="w-10 rounded-full">
+                    <img
+                      alt="Tailwind CSS chat bubble component"
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW710hPlb48q-g88rWvxavK9XmOeFOXU1ZMA&s"
+                    />
+                  </div>
+                </div>
+                <div className="chat-header">OCA</div>
+                <div className="chat-bubble bg-[#F5F5F5] text-lg text-[#303972]">
+                  {msg.content}
+                </div>
+                <div className="chat-footer opacity-100">
+                  <time className="text-xs opacity-50">{msg.time}</time>
+                </div>
               </div>
-            </div>
-            <div className="chat-header">OCA</div>
-            <div className="chat-bubble">You were the Chosen One!</div>
-            <div className="chat-footer opacity-50">
-              <time className="text-xs opacity-50">12:45</time>
-            </div>
-          </div>
-          <div className="chat chat-end">
-            <div className="chat-image avatar">
-              <div className="w-10 rounded-full">
-                <img
-                  alt="Tailwind CSS chat bubble component"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                />
+            ) : (
+              // club
+              <div key={index} className="chat chat-end">
+                <div className="chat-image avatar">
+                  <div className="w-10 rounded-full">
+                    <img
+                      alt="Tailwind CSS chat bubble component"
+                      src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                    />
+                  </div>
+                </div>
+                <div className="chat-header">{uppercaseUsername}</div>
+                <div className="chat-bubble bg-[#4D44B5] text-white text-lg">
+                  {msg.content}
+                </div>
+                <div className="chat-footer opacity-100">
+                  <time className="text-xs opacity-50">{msg.time}</time>
+                </div>
               </div>
-            </div>
-            <div className="chat-header">Club Name</div>
-            <div className="chat-bubble">I hate you!</div>
-            <div className="chat-footer opacity-50">
-              <time className="text-xs opacity-50">12:46</time>
-            </div>
-          </div>
-          <div className="chat chat-start">
-            <div className="chat-image avatar">
-              <div className="w-10 rounded-full">
-                <img
-                  alt="Tailwind CSS chat bubble component"
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW710hPlb48q-g88rWvxavK9XmOeFOXU1ZMA&s"
-                />
-              </div>
-            </div>
-            <div className="chat-header">OCA</div>
-            <div className="chat-bubble">You were the Chosen One!</div>
-            <div className="chat-footer opacity-50">
-              <time className="text-xs opacity-50">12:45</time>
-            </div>
-          </div>
+            )
+          )}
         </div>
         {/* end chat bubbl */}
         <div className="divider"></div>
         {/* input for message */}
         <div className="join w-full">
           <input
+           onChange={(e)=> setText(e.target.value)}
             className="input input-bordered join-item text-[14px] font-normal text-[#A098AE] w-[100%] rounded-2xl"
             placeholder="Write your message..."
           />
-          <button className="btn join-item rounded-r-full text-white bg-[#4D44B5]">Send <BiSend/></button>
+          <button onClick={()=>{ handleSendMessage(); }} className="btn join-item rounded-r-full text-white bg-[#4D44B5]">
+            Send <BiSend />
+          </button>
         </div>
       </div>
     </div>

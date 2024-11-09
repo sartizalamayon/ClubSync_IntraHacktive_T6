@@ -20,7 +20,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <div className="flex">
+      <div className="flex font-poppins">
         <div className="bg-[#4D44B4] w-[250px] min-h-screen">
           <ul className="menu pr-0 space-y-5 mt-2 p-4 text-base text-[#C1BBEB] font-medium">
             {/* OCA navbar */}
@@ -86,9 +86,9 @@ const Dashboard = () => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to={"/dashboard/analytics"}>
+                  <NavLink to={"/dashboard/club-analytics"}>
                     <MdAnalytics className="text-3xl" />
-                    <span className="text-xl">Analytics</span>
+                    <span className="text-xl">Transactions</span>
                   </NavLink>
                 </li>
                 <li>
@@ -116,7 +116,7 @@ const Dashboard = () => {
             </li>
           </ul>
         </div>
-        <div className="p-[30px] bg-[rgb(243,244,255)] w-full">
+        <div className="p-[30px] bg-[rgb(243,244,255)] w-full font-poppins">
           <div className="w-full  min-h-screen bg-[#F3F4FF]">
             <Outlet />
           </div>

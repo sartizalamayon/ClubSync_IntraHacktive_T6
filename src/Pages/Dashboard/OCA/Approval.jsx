@@ -1,8 +1,8 @@
+import axios from "axios";
 import { BsEye } from "react-icons/bs";
 import { MdNotificationsActive } from "react-icons/md";
-import useAllPendingRequests from "../../../hooks/useAllPendingRequests";
-import axios from "axios";
 import Swal from "sweetalert2";
+import useAllPendingRequests from "../../../hooks/useAllPendingRequests";
 
 const Approval = () => {
   const [allPendingRequests, allPendingRequestsRefetch] = useAllPendingRequests();
@@ -154,7 +154,7 @@ const Approval = () => {
                 <th>Title</th>
                 <th>Club</th>
                 <th>Date</th>
-                <th>Action</th>
+                <th className="text-center">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -169,7 +169,7 @@ const Approval = () => {
                 <td className="text-sm font-normal text-[#A098AE]">
                   {event?.date}
                 </td>
-                <td>
+                <td className="flex justify-center items-center">
                   {/* view - A modal opens here with all the event info*/}
                   <button onClick={() => handleView(event._id)} className="btn bg-[#FB7D5B] rounded-xl text-white font-normal">
                     <BsEye />

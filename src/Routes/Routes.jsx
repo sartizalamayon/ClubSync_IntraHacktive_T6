@@ -3,6 +3,7 @@ import Dashboard from "../Layout/Dashboard";
 import Root from "../Layout/Root";
 import EventPlanner from "../Pages/ClubPages/EventPlanner/EventPlanner";
 import Chat from "../Pages/Dashboard/Club/Chat";
+import ClubAnalytics from "../Pages/Dashboard/Club/ClubAnalytics";
 import DashboardHome from "../Pages/Dashboard/DashboardHome";
 import Approval from "../Pages/Dashboard/OCA/Approval";
 import ChatWithClub from "../Pages/Dashboard/OCA/ChatWithClub";
@@ -46,6 +47,10 @@ export const router = createBrowserRouter([
       {
         path: '/dashboard/chat',
         element: <PrivateRoute><Chat/></PrivateRoute>
+      },
+      {
+        path: '/dashboard/club-analytics',
+        element: <PrivateRoute><ClubAnalytics/></PrivateRoute>
       },
       // OCA dashboard
       {

@@ -21,7 +21,7 @@ const OcaChat = () => {
         </div>
         <div className="flex-none gap-2">
           <div className="form-control">
-            <label className="input input-bordered flex items-center gap-2 rounded-full">
+            <label className="input input-bordered flex items-center gap-2 rounded-full bg-white">
               <input type="text" className="grow " placeholder="Search" />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -62,7 +62,7 @@ const OcaChat = () => {
           <p className="text-xl font-bold text-[#303972] text-left">Messages</p>
           {/* search input */}
           <div className="py-6">
-            <label className="input input-bordered flex items-center gap-2 border border-[#A098AE] rounded-3xl h-10">
+            <label className="input input-bordered flex items-center gap-2 border border-[#A098AE] rounded-3xl h-10 bg-white">
               <input type="text" className="grow" placeholder="Search" />
               <svg
                 xmlns="http://www.w3.org/2000/svg"

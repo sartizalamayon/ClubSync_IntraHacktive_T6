@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import { CiCalendarDate } from "react-icons/ci";
-import { MdNotificationsActive } from "react-icons/md";
 import { AuthContext } from "../../../Context/AuthProvider";
 import useCurrUser from "../../../hooks/useCurrUser";
 
@@ -10,8 +9,8 @@ const ClubAnalytics = () => {
   const { user } = useContext(AuthContext);
 
   const [currUser] = useCurrUser();
-  const [clubInfo, setClubInfo] = useState([]);
-  const [events, setEvents] = useState([]);
+  // const [clubInfo, setClubInfo] = useState([]);
+  // const [events, setEvents] = useState([]);
 
   // State for singleEvent, managed independently
 

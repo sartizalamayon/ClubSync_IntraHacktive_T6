@@ -94,20 +94,25 @@ const EventPlanner = () => {
       clubMail: user?.email,
       advisorEmail: clubInfo.advisors[0].advisorEmail,
     };
-    
+
     mutation.mutate(postData);
   };
 
   const { data: clubInfo, isLoading: isClubInfoLoading } = useQuery({
     queryKey: ["clubInfo", user?.email],
-    queryFn: () => axios.get(`http://localhost:3000/dashboard-info/${user?.email}`).then((res) => res.data),
+    queryFn: () =>
+      axios
+        .get(`http://localhost:3000/dashboard-info/${user?.email}`)
+        .then((res) => res.data),
     enabled: !!user?.email,
   });
-  
-  if(isClubInfoLoading){
-    return <div className="flex justify-center items-center h-screen">
-      <span className="loading loading-spinner text-[#4D44B5]"></span>
-    </div>
+
+  if (isClubInfoLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <span className="loading loading-spinner text-[#4D44B5]"></span>
+      </div>
+    );
   }
 
   return (

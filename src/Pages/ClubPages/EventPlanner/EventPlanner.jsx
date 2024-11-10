@@ -16,6 +16,7 @@ import { AuthContext } from "../../../Context/AuthProvider";
 import useCurrUser from "../../../hooks/useCurrUser";
 import usePendingRequests from "../../../hooks/usePendingRequests";
 import useRespondedRequests from "../../../hooks/useRespondedRequests";
+import useCurrUser from "../../../hooks/useCurrUser";
 
 {
   /* These imports should be added at the top of your file */

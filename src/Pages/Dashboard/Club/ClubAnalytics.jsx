@@ -8,6 +8,8 @@ import useCurrUser from "../../../hooks/useCurrUser";
 const ClubAnalytics = () => {
   const { user } = useContext(AuthContext);
   const [currUser] = useCurrUser();
+  // const [clubInfo, setClubInfo] = useState([]);
+  // const [events, setEvents] = useState([]);
 
   const [currUser] = useCurrUser();
   // const [clubInfo, setClubInfo] = useState([]);

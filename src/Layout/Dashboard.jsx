@@ -8,6 +8,7 @@ import { BiCalendar, BiChat } from "react-icons/bi";
 import { BsInfo } from "react-icons/bs";
 import { AuthContext } from "../Context/AuthProvider";
 import './Dash.css';
+import useCurrUser from "../hooks/useCurrUser";
 
 const Dashboard = () => {
   const { user, logOut } = useContext(AuthContext);
@@ -15,6 +16,8 @@ const Dashboard = () => {
   const email = user?.email;
   const username = email.split('@')[0];
   const uppercaseUsername = username.toUpperCase();
+
+  const [currUser] = useCurrUser();
 
 
 
@@ -97,6 +100,12 @@ const Dashboard = () => {
                     <span className="text-xl">Chat</span>
                   </NavLink>
                 </li>
+                <li>
+                  <NavLink to={`/dashboard/club-info/${currUser._id}`}>
+                    <BsInfo className="text-4xl" />
+                    <span className="text-xl">Club Info</span>
+                  </NavLink>
+                </li>
               </>
             )}
 
@@ -109,7 +118,7 @@ const Dashboard = () => {
               </NavLink>
             </li>
             <li onClick={() => logOut()}>
-              <NavLink to={"/"}>
+              <NavLink to={"/login"}>
                 <CgLogOut className="text-3xl" />
                 <span className="text-xl">Logout</span>
               </NavLink>

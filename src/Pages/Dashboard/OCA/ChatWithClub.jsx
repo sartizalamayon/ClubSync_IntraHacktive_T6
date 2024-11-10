@@ -59,7 +59,7 @@ const ChatWithClub = () => {
     <div>
       <div className=" bg-white p-8 rounded-2xl h-full">
         {/* chat top */}
-        <div className="navbar bg-base-100">
+        <div className="navbar bg-white">
           <div className="flex-1">
             <div className="flex items-center gap-3">
               <div className="avatar">
@@ -71,8 +71,8 @@ const ChatWithClub = () => {
                 </div>
               </div>
               <div>
-                <div className="font-bold">{uppercaseUsername}</div>
-                <div className="text-sm opacity-50">BRAC University</div>
+                <div className="font-bold text-gray-700">{uppercaseUsername}</div>
+                <div className="text-sm opacity-50 text-gray-500">BRAC University</div>
               </div>
             </div>
           </div>
@@ -121,7 +121,7 @@ const ChatWithClub = () => {
                   <div className="w-10 rounded-full">
                     <img
                       alt="Tailwind CSS chat bubble component"
-                      src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                      src={club?.photo_url}
                     />
                   </div>
                 </div>
@@ -143,7 +143,7 @@ const ChatWithClub = () => {
           <input
             onChange={(e) => setText(e.target.value)}
             value={text}
-            className="input input-bordered join-item text-[14px] font-normal text-[black] w-[100%] rounded-2xl"
+            className="input input-bordered join-item text-[14px] font-normal text-[black] w-[100%] rounded-2xl bg-white"
             placeholder="Write your message..."
           />
           <button

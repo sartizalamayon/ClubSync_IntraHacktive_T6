@@ -81,7 +81,7 @@ const ClubInfo = () => {
             className="group"
           >
             <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 
-                          transform hover:-translate-y-1 overflow-hidden">
+                          transform hover:-translate-y-1 overflow-hidden w-[95%]">
               {/* Image Container - Now Square */}
               <div className="relative aspect-square overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent z-10" />

@@ -11,12 +11,6 @@ const ClubAnalytics = () => {
   // const [clubInfo, setClubInfo] = useState([]);
   // const [events, setEvents] = useState([]);
 
-  const [currUser] = useCurrUser();
-  // const [clubInfo, setClubInfo] = useState([]);
-  // const [events, setEvents] = useState([]);
-
-  // State for singleEvent, managed independently
-
   const [singleEvent, setSingleEvent] = useState([]);
 
   // Fetch club info with loading state

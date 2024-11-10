@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect, useState, useContext } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { PieChart, Pie, Cell } from 'recharts';
-import { MdNotificationsActive, MdPeople, MdEvent } from 'react-icons/md';
+import {  MdPeople, MdEvent } from 'react-icons/md';
 import { BsCurrencyDollar, BsCalendarEvent } from 'react-icons/bs';
 import { NavLink } from 'react-router-dom';
 import Announcements from '../Shared/Announcement';

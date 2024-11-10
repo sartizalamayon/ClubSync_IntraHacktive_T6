@@ -1,34 +1,25 @@
 import dayGridPlugin from "@fullcalendar/daygrid";
 import FullCalendar from "@fullcalendar/react";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { BsCalendarEvent } from "react-icons/bs";
 
 const Calendar = () => {
-  const [events, setEvents] = useState([]);
-  const [upcomingEvents, setUpcomingEvents] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: events = [], isLoading } = useQuery({
+    queryKey: ["acceptedEvents"],
+    queryFn: () =>
+      axios.get("http://localhost:3000/accepted-events").then((res) => res.data),
+  });
 
-  useEffect(() => {
-    axios.get('http://localhost:3000/accepted-events')
-      .then((res) => {
-        setEvents(res.data);
-        
-        console.log(res.data);
-        // Calculate upcoming events
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        const upcoming = res.data
-          .filter(event => new Date(event?.date) >= today)
-          .slice(0, 3);
-
-        setUpcomingEvents(upcoming);
-      })
-      .catch(error => console.error('Error fetching events:', error))
-      .finally(() => setIsLoading(false));
-  }, []);
+  // Calculate upcoming events after data is fetched
+  const upcomingEvents = events
+    .filter(event => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return new Date(event?.date) >= today;
+    })
+    .slice(0, 3);
 
   const renderEventContent = (eventInfo) => {
     const { event } = eventInfo;
@@ -56,6 +47,15 @@ const Calendar = () => {
     const options = { month: 'short', day: 'numeric', year: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-US', options);
   };
+
+  // Display loading indicator if data is being fetched
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <span className="loading loading-spinner text-[#4D44B5]"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[rgb(240,241,255)]">

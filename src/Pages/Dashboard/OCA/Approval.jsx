@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import useAllPendingRequests from "../../../hooks/useAllPendingRequests";
 
 const Approval = () => {
-  const [allPendingRequests, allPendingRequestsRefetch] = useAllPendingRequests();
+  const [allPendingRequests, allPendingRequestsRefetch, isLoading] = useAllPendingRequests();
   const [searchQuery, setSearchQuery] = useState('');
 
   // Memoized filtered requests
@@ -219,8 +219,14 @@ const Approval = () => {
       console.error('Error rejecting event:', error);
     }
   };
-
-
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <span className="loading loading-spinner text-[#4D44B5]"></span>
+      </div>
+    );
+  }
+  
   return (
     <div>
       {/* Header */}

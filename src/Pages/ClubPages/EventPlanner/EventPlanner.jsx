@@ -110,9 +110,6 @@ const EventPlanner = () => {
           </a>
         </div>
         <div className="flex-none gap-2">
-          <span className="p-3 bg-white rounded-3xl">
-            <MdNotificationsActive />
-          </span>
           <div className="dropdown dropdown-end">
             <div
               tabIndex={0}

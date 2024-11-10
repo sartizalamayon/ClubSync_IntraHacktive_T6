@@ -253,7 +253,7 @@ useEffect(() => {
      {/* Header */}
      <div className="navbar p-0 mt-[-20px] mb-6">
        <div className="flex-1">
-         <h1 className="text-3xl font-bold text-[#303972]">Dashboard</h1>
+         <h1 className="text-[1.62rem] font-bold text-[#303972]">Dashboard</h1>
        </div>
        <div className="flex-none gap-4">
         
@@ -289,7 +289,7 @@ useEffect(() => {
        className="w-24 h-24 rounded-xl object-cover ring-4 ring-[#4c44b3]/10"
      />
      <div className="absolute -bottom-2 -right-2 h-8 w-8 bg-[#4c44b3] rounded-lg flex items-center justify-center">
-       <span className="text-white text-sm font-medium">
+       <span className="text-white text-xs font-medium">
          {data?.role === 'oca' ? 'OCA' : 'CLUB'}
        </span>
      </div>
@@ -297,10 +297,10 @@ useEffect(() => {
    <div className="flex-1">
      <div className="flex justify-between items-start">
        <div>
-         <h1 className="text-2xl font-bold text-[#303972]">{data?.name}</h1>
+         <h1 className="text-xl font-bold text-[#303972]">{data?.name}</h1>
          <p className="text-gray-500">{data?.email}</p>
          {data?.fullName && (
-           <p className="text-[#4c44b3] font-medium mt-1">{data?.fullName}</p>
+           <p className="text-[#4c44b3] font-medium mt-1 text-base">{data?.fullName}</p>
          )}
        </div>
        <div className="flex gap-3">
@@ -462,7 +462,7 @@ useEffect(() => {
 
          {/* Upcoming Events */}
          <div className="bg-white rounded-xl shadow-sm p-6">
-           <h2 className="text-xl font-bold text-[#303972] mb-4">Upcoming Events</h2>
+           <h2 className="text-lg font-bold text-[#303972] mb-4">Upcoming Events</h2>
            <div className="space-y-4">
              {upcomingEvents?.length > 0 ? (
                upcomingEvents?.map((event, index) => (
@@ -476,14 +476,14 @@ useEffect(() => {
                    <div className="flex-1">
                      <h3 className="font-semibold text-[#303972]">{event.title}</h3>
                      <div className="flex items-center gap-4 mt-1">
-                       <span className="text-sm text-gray-500">
+                       <span className="text-xs text-gray-500">
                          {new Date(event.date).toLocaleDateString('en-US', {
                            month: 'long',
                            day: 'numeric',
                            year: 'numeric'
                          })}
                        </span>
-                       <span className="text-sm font-medium text-[#4c44b3]">
+                       <span className="text-xs font-medium text-[#4c44b3]">
                          {event?.clubMail?.split('@')[0].toUpperCase()}
                        </span>
                      </div>
@@ -520,14 +520,14 @@ const StatCard = ({ icon, title, value, color }) => (
  <div className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
    <div className="flex items-center gap-4">
      <div
-       className="p-3 rounded-lg"
+       className="px-3 py-2 rounded-lg"
        style={{ backgroundColor: `${color}10` }}
      >
        {React.cloneElement(icon, { style: { color } })}
      </div>
      <div>
-       <p className="text-sm text-gray-500">{title}</p>
-       <p className="text-2xl font-bold text-[#303972]">{value}</p>
+       <p className="text-xs text-gray-500">{title}</p>
+       <p className="text-xl font-bold text-[#303972]">{value}</p>
      </div>
    </div>
  </div>

@@ -15,7 +15,7 @@ const OcaChat = () => {
   return (
     <div>
       {/* header */}
-      <div className="navbar p-0 mt-[-20px]">
+      <div className="navbar p-0 mt-[-20px] ">
         <div className="flex-1">
           <a className="text-3xl font-bold text-[#303972] ">Chat</a>
         </div>

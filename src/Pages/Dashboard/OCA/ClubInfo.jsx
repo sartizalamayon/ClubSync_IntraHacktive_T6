@@ -33,10 +33,10 @@ const ClubInfo = () => {
   return (
     <div>
       {/* Header */}
-      <div className="navbar p-0 mt-[-20px]">
+      <div className="navbar pb-3 mt-[-18px]">
         <div className="flex-1">
           <div>
-            <a className="text-3xl font-bold text-[#303972]">All Clubs</a>
+            <a className="text-[1.62rem] font-bold text-[#303972]">All Clubs</a>
             <p className="text-sm text-gray-500 mt-1">
               Showing {filteredClubs.length} of {allClubs.length} clubs
             </p>
@@ -78,7 +78,7 @@ const ClubInfo = () => {
       </div>
 
       {/* Club Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-6 mt-6">
         {filteredClubs.map((club) => (
           <Link
             to={`/dashboard/club-info/${club._id}`}
@@ -91,7 +91,7 @@ const ClubInfo = () => {
             >
               {/* Image Container - Now Square */}
               <div className="relative aspect-square overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent z-10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-10" />
                 <img
                   src={club.photo_url}
                   alt={`${club.name} Logo`}
@@ -120,12 +120,7 @@ const ClubInfo = () => {
                   </div>
 
                   {/* Department/Location if available */}
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <BsBuilding className="h-4 w-4 text-[#4c44b3]" />
-                    <span className="text-sm">
-                      Department of {club.department || "General"}
-                    </span>
-                  </div>
+                  
                 </div>
 
                 {/* View Details Button */}

@@ -172,7 +172,7 @@ const Announcements = () => {
       {/* Header */}
       <div className="p-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-[#303972]">Announcements</h2>
+          <h2 className="text-lg font-bold text-[#303972]">Announcements</h2>
           {(currUser?.role === 'oca' || currUser?.role === 'club') && (
             <button
               onClick={() => setShowAddModal(true)}
@@ -194,7 +194,7 @@ const Announcements = () => {
                 : 'text-gray-600 hover:bg-white'
             }`}
           >
-            All Announcements
+            All
           </button>
           <button
             onClick={() => setActiveTab('our')}
@@ -204,7 +204,7 @@ const Announcements = () => {
                 : 'text-gray-600 hover:bg-white'
             }`}
           >
-            Our Announcements
+            Ours
           </button>
         </div>
       </div>
@@ -219,10 +219,10 @@ const Announcements = () => {
             >
               <div className="flex justify-between items-start">
                 <div className="flex-1">
-                  <h3 className="font-semibold text-[#303972] text-lg">
+                  <h3 className="font-semibold text-[#303972] text-base">
                     {announcement.title}
                   </h3>
-                  <p className="text-gray-600 mt-2">
+                  <p className="text-gray-600 mt-2 text-sm">
                     {announcement.description}
                   </p>
                   <div className="flex items-center gap-4 mt-3">
@@ -245,7 +245,7 @@ const Announcements = () => {
                     onClick={() => handleDelete(announcement._id)}
                     className="opacity-0 group-hover:opacity-100 transition-opacity p-2 text-red-500 hover:bg-red-50 rounded-lg"
                   >
-                    <MdDelete size={20} />
+                    <MdDelete size={15} />
                   </button>
                 )}
               </div>
@@ -295,7 +295,7 @@ const AddAnnouncementModal = ({ onClose, onSubmit }) => {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 ">
       <div className="bg-white rounded-xl p-6 w-full max-w-md">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-[#303972]">New Announcement</h2>
+          <h2 className="text-base font-bold text-[#303972]">New Announcement</h2>
           <button 
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -335,13 +335,13 @@ const AddAnnouncementModal = ({ onClose, onSubmit }) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-[#4c44b3] text-white rounded-lg hover:bg-[#3f3794] transition-colors"
+              className="px-4 py-2 bg-[#4c44b3] text-white rounded-lg hover:bg-[#3f3794] transition-colors text-sm"
             >
               Post Announcement
             </button>

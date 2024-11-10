@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 const useAllPendingRequests = () => {
-    const {data : allPendingRequests = [], refetch: allPendingRequestsRefetch} = useQuery({
+    const {data : allPendingRequests = [], refetch: allPendingRequestsRefetch, isLoading} = useQuery({
         queryKey: ['allPendingRequests'],
         queryFn: async () => {
             const res = await axios.get(`http://localhost:3000/get-all-pending-events`);
@@ -11,7 +11,7 @@ const useAllPendingRequests = () => {
     }
     )
 
-    return [allPendingRequests, allPendingRequestsRefetch]
+    return [allPendingRequests, allPendingRequestsRefetch, isLoading]
 };
 
 export default useAllPendingRequests;

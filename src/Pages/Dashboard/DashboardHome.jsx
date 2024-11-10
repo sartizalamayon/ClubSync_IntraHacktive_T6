@@ -1,17 +1,54 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { MdNotificationsActive } from "react-icons/md";
 
+import { useQuery } from "@tanstack/react-query";
 import { NavLink } from "react-router-dom";
 import budget from "../../../public/cash.png";
 import { AuthContext } from "../../Context/AuthProvider";
 const DashboardHome = () => {
   const { user } = useContext(AuthContext);
-  const [data, setData] = useState([]);
-  const [events, setEvents] = useState([]);
-  const [totalEvents, setTotalEvents] = useState([]);
+
+  // Fetch club info
+  const { data: data = [], isLoading: isClubInfoLoading } = useQuery({
+    queryKey: ["clubInfo", user?.email],
+    queryFn: () =>
+      axios
+        .get(`http://localhost:3000/dashboard-info/${user?.email}`)
+        .then((res) => res.data),
+    enabled: !!user?.email, // Only run if user email is available
+  });
+
+  // Fetch responded events
+  const { data: totalEvents = [], isLoading: isTotalEventsLoading } = useQuery({
+    queryKey: ["respondedEvents", user?.email],
+    queryFn: () =>
+      axios
+        .get(`http://localhost:3000/get-responded-events/${user?.email}`)
+        .then((res) => res.data),
+    enabled: !!user?.email,
+  });
+
+  // Fetch all events
+  const { data: events = [], isLoading: isEventsLoading } = useQuery({
+    queryKey: ["dashboardEvents"],
+    queryFn: () =>
+      axios
+        .get(`http://localhost:3000/dashboard-events`)
+        .then((res) => res.data),
+  });
+
+  if (isClubInfoLoading || isTotalEventsLoading || isEventsLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <span className="loading loading-spinner text-[#4D44B5]"></span>
+      </div>
+    );
+  }
   const totalBudgetSum = totalEvents.reduce((sum, event) => {
-    return sum + (typeof event.budget === "number" ? event.budget : 0);
+    // Check if budget is a string and convert to an integer, otherwise keep it as is
+    const budget = typeof event.budget === 'string' ? parseInt(event.budget, 10) : event.budget;
+    return sum + (isNaN(budget) ? 0 : budget); // Add to sum only if budget is a valid number
   }, 0);
   const totalGatePass = totalEvents.reduce((sum, event) => {
     return (
@@ -19,29 +56,6 @@ const DashboardHome = () => {
       (typeof event.guestPassesCount === "number" ? event.guestPassesCount : 0)
     );
   }, 0);
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3000/dashboard-info/${user?.email}`)
-      .then((res) => {
-        setData(res.data);
-      });
-    axios
-      .get(`http://localhost:3000/get-responded-events/${user?.email}`)
-      .then((response) => {
-        setTotalEvents(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [user?.email]);
-
-  useEffect(() => {
-    axios.get(`http://localhost:3000/dashboard-events`).then((res) => {
-      setEvents(res.data);
-      console.log(res.data);
-    });
-  }, []);
-  console.log(data);
 
   return (
     <>
@@ -142,7 +156,7 @@ const DashboardHome = () => {
               <div className="text-[#303972] flex flex-col justify-center items-center">
                 <small className="text-sm font-normal">Events</small>
                 <small className="text-4xl font-bold text-center">
-                  {totalEvents?.length}
+                  {totalEvents && totalEvents?.length}
                 </small>
               </div>
             </div>
@@ -266,7 +280,9 @@ const DashboardHome = () => {
         {/* announcement */}
         <div className="w-[30%] bg-white rounded-2xl">
           <div>
-            <h1 className="text-2xl font-bold text-[#303972] text-center  rounded-2xl mt-3">Announcements</h1>
+            <h1 className="text-2xl font-bold text-[#303972] text-center  rounded-2xl mt-3">
+              Announcements
+            </h1>
           </div>
           <div className="bg-white rounded-xl m-4">
             <ul className="timeline timeline-vertical">
@@ -289,7 +305,7 @@ const DashboardHome = () => {
                 <div className="timeline-end timeline-box">
                   First Macintosh computer
                 </div>
-                <hr/>
+                <hr />
               </li>
               <li>
                 <hr />

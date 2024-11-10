@@ -1,6 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { BiMoney } from "react-icons/bi";
 import { BsBuilding } from "react-icons/bs";
@@ -43,7 +43,7 @@ const EventPlanner = () => {
   } = useForm();
 
   const { user } = useContext(AuthContext);
-  const [clubInfo, setClubInfo] = useState([]);
+  // const [clubInfo, setClubInfo] = useState([]);
   const [pendingRequests, pendingRequestsRefetch] = usePendingRequests();
   const [respondedRequests, respondedRequestsRefetch] = useRespondedRequests();
 
@@ -95,11 +95,17 @@ const EventPlanner = () => {
     mutation.mutate(postData);
   };
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3000/dashboard-info/${user?.email}`)
-      .then((res) => setClubInfo(res.data));
-  }, [user?.email]);
+  const { data: clubInfo, isLoading: isClubInfoLoading } = useQuery({
+    queryKey: ["clubInfo", user?.email],
+    queryFn: () => axios.get(`http://localhost:3000/dashboard-info/${user?.email}`).then((res) => res.data),
+    enabled: !!user?.email,
+  });
+  
+  if(isClubInfoLoading){
+    return <div className="flex justify-center items-center h-screen">
+      <span className="loading loading-spinner text-[#4D44B5]"></span>
+    </div>
+  }
 
   return (
     <div>

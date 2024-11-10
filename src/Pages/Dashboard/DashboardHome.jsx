@@ -24,7 +24,7 @@ const DashboardHome = () => {
     queryKey: ["respondedEvents", user?.email],
     queryFn: () =>
       axios
-        .get(`http://localhost:3000/get-responded-events/${user?.email}`)
+        .get(`http://localhost:3000/get-responded-events-accepted/${user?.email}`)
         .then((res) => res.data),
     enabled: !!user?.email,
   });

@@ -4,15 +4,15 @@ import { Link } from "react-router-dom";
 import { BiSearch } from "react-icons/bi";
 import { HiOutlineMail } from "react-icons/hi";
 import { BsBuilding } from "react-icons/bs";
-import { useState, useMemo } from 'react';
+import { useState, useMemo } from "react";
 
 const ClubInfo = () => {
-  const [allClubs, allClubsRefetch] = useAllClubs();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [allClubs, allClubsRefetch, isLoading] = useAllClubs();
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Memoized filtered clubs
   const filteredClubs = useMemo(() => {
-    return allClubs.filter(club => {
+    return allClubs.filter((club) => {
       const searchTerm = searchQuery.toLowerCase();
       return (
         club.name.toLowerCase().includes(searchTerm) ||
@@ -22,6 +22,13 @@ const ClubInfo = () => {
       );
     });
   }, [allClubs, searchQuery]);
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <span className="loading loading-spinner text-primary"></span>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -51,8 +58,6 @@ const ClubInfo = () => {
               <BiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#4c44b3] h-5 w-5" />
             </div>
           </div>
-          
-          
 
           {/* Profile */}
           <div className="dropdown dropdown-end">
@@ -75,13 +80,15 @@ const ClubInfo = () => {
       {/* Club Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
         {filteredClubs.map((club) => (
-          <Link 
-            to={`/dashboard/club-info/${club._id}`} 
+          <Link
+            to={`/dashboard/club-info/${club._id}`}
             key={club._id}
             className="group"
           >
-            <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 
-                          transform hover:-translate-y-1 overflow-hidden w-[95%]">
+            <div
+              className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 
+                          transform hover:-translate-y-1 overflow-hidden w-[95%]"
+            >
               {/* Image Container - Now Square */}
               <div className="relative aspect-square overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent z-10" />
@@ -107,16 +114,20 @@ const ClubInfo = () => {
                   {/* Email */}
                   <div className="flex items-center gap-2 text-gray-600">
                     <HiOutlineMail className="h-4 w-4 text-[#4c44b3]" />
-                    <span className="text-sm truncate" title={club.email}>{club.email}</span>
+                    <span className="text-sm truncate" title={club.email}>
+                      {club.email}
+                    </span>
                   </div>
-                  
+
                   {/* Department/Location if available */}
                   <div className="flex items-center gap-2 text-gray-600">
                     <BsBuilding className="h-4 w-4 text-[#4c44b3]" />
-                    <span className="text-sm">Department of {club.department || "General"}</span>
+                    <span className="text-sm">
+                      Department of {club.department || "General"}
+                    </span>
                   </div>
                 </div>
-                
+
                 {/* View Details Button */}
                 <div className="mt-4 flex justify-end">
                   <span className="text-[#303472] text-sm font-medium group-hover:underline">
@@ -131,8 +142,12 @@ const ClubInfo = () => {
         {/* No Results Message */}
         {filteredClubs.length === 0 && (
           <div className="col-span-full text-center py-10">
-            <div className="text-[#4c44b3] text-lg font-medium">No clubs found</div>
-            <p className="text-gray-500 mt-2">Try adjusting your search terms</p>
+            <div className="text-[#4c44b3] text-lg font-medium">
+              No clubs found
+            </div>
+            <p className="text-gray-500 mt-2">
+              Try adjusting your search terms
+            </p>
           </div>
         )}
       </div>

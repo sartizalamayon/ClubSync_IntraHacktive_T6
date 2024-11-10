@@ -32,9 +32,11 @@ const Chat = () => {
   };
 
   useEffect(() => {
+    
     axios.get(`http://localhost:3000/get-messages/${user?.email}`)
       .then((res) => {
         setMessage(res.data);
+        
       });
   }, [user?.email]);
 

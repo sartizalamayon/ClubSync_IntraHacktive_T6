@@ -1,37 +1,48 @@
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { CiCalendarDate } from "react-icons/ci";
-import { MdNotificationsActive } from "react-icons/md";
 import { AuthContext } from "../../../Context/AuthProvider";
 import useCurrUser from "../../../hooks/useCurrUser";
 
 const ClubAnalytics = () => {
   const { user } = useContext(AuthContext);
   const [currUser] = useCurrUser();
-  const [clubInfo, setClubInfo] = useState([]);
-  const [events, setEvents] = useState([]);
+  // const [clubInfo, setClubInfo] = useState([]);
+  // const [events, setEvents] = useState([]);
+
   const [singleEvent, setSingleEvent] = useState([]);
+
+  // Fetch club info with loading state
+  const { data: clubInfo = [], isLoading: isClubInfoLoading } = useQuery({
+    queryKey: ["clubInfo", user?.email],
+    queryFn: () => axios.get(`http://localhost:3000/dashboard-info/${user?.email}`).then((res) => res.data),
+    enabled: !!user?.email,
+  });
+
+  // Fetch responded events with loading state
+  const { data: events = [], isLoading: isEventsLoading } = useQuery({
+    queryKey: ["respondedEvents", user?.email],
+    queryFn: () => axios.get(`http://localhost:3000/get-responded-events-accepted/${user?.email}`).then((res) => res.data),
+    enabled: !!user?.email,
+  });
+
+  // Calculate total budget sum
   const totalBudgetSum = events.reduce((sum, event) => {
-    return sum + (typeof event.budget === "number" ? event.budget : 0);
+    // Convert the budget to an integer if it's a string, and add it to the sum
+    const budget = typeof event.budget === 'string' ? parseInt(event.budget, 10) : event.budget;
+    return sum + (isNaN(budget) ? 0 : budget); // Ensure the value is a valid number
   }, 0);
-
+console.log(events);
+  // Check if either data is loading
+  if (isClubInfoLoading || isEventsLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <span className="loading loading-spinner text-[#4D44B5]"></span>
+      </div>
+    );
+  }
  
-
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3000/get-responded-events/${user?.email}`)
-      .then((response) => {
-        setEvents(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    axios.get(`http://localhost:3000/dashboard-info/${user?.email}`)
-     .then((response) => {
-        setClubInfo(response.data);
-      })
-  }, [user?.email, setClubInfo]);
- console.log(clubInfo.totalMembers);
   return (
     <div>
       {/* header */}

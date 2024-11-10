@@ -1,25 +1,19 @@
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BiSend } from "react-icons/bi";
 import { FaVideo } from "react-icons/fa";
 import { useParams } from "react-router-dom";
-import { AuthContext } from "../../../Context/AuthProvider";
 
 const ChatWithClub = () => {
-  const { setLoading, loading } = useContext(AuthContext);
   const { email } = useParams();
-  const [clubInfo, setClubInfo] = useState([]);
+  // const [clubInfo, setClubInfo] = useState([]);
   const [messages, setMessage] = useState([]);
   const username = email?.split("@")[0];
   const uppercaseUsername = username?.toUpperCase();
 
-  const club = clubInfo.find(club => club.email == email);
-  const [text, setText] = useState('');
-
-
   // Reference for the chat container to scroll to the latest message
   const chatContainerRef = useRef(null);
-
 
   const handleSendMessage = () => {
     const messageInfo = {
@@ -41,19 +35,37 @@ const ChatWithClub = () => {
   // Scroll to the latest message when messages change
   useEffect(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
-
+  const { data: clubInfo, isLoading } = useQuery({
+    queryKey: ["clubInfo"],
+    queryFn: async () => {
+      const response = await axios.get(
+        "http://localhost:3000/get-club-list"
+      );
+      return response.data;
+    },
+  });
+  const club = clubInfo?.find((club) => club.email == email);
+  const [text, setText] = useState("");
   // fetch chat messages from API
   useEffect(() => {
-    axios.get(`http://localhost:3000/get-messages/${email}`).then((res) => {
-      setMessage(res.data);
-    });
-    axios.get("http://localhost:3000/get-club-list").then((res) => {
-      setClubInfo(res.data);
-    });
-  }, [email, setLoading]);
+    
+    axios
+      .get(`http://localhost:3000/get-messages/${email}`)
+      .then((res) => {
+        setMessage(res.data);
+      });
+  }, [email]);
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <span className="loading loading-spinner text-[#4D44B5]"></span>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -71,8 +83,12 @@ const ChatWithClub = () => {
                 </div>
               </div>
               <div>
-                <div className="font-bold text-gray-700">{uppercaseUsername}</div>
-                <div className="text-sm opacity-50 text-gray-500">BRAC University</div>
+                <div className="font-bold text-gray-700">
+                  {uppercaseUsername}
+                </div>
+                <div className="text-sm opacity-50 text-gray-500">
+                  BRAC University
+                </div>
               </div>
             </div>
           </div>
@@ -111,7 +127,9 @@ const ChatWithClub = () => {
                   {msg.content}
                 </div>
                 <div className="chat-footer opacity-100">
-                  <time className="text-xs opacity-50">{msg.time} | {msg.date}</time>
+                  <time className="text-xs opacity-50">
+                    {msg.time} | {msg.date}
+                  </time>
                 </div>
               </div>
             ) : (
@@ -130,7 +148,10 @@ const ChatWithClub = () => {
                   {msg.content}
                 </div>
                 <div className="chat-footer opacity-100">
-                  <time className="text-xs opacity-50"> {msg.date} | {msg.time}</time>
+                  <time className="text-xs opacity-50">
+                    {" "}
+                    {msg.date} | {msg.time}
+                  </time>
                 </div>
               </div>
             )

@@ -27,7 +27,7 @@ const ChatWithClub = () => {
       receiverEmail: email,
       content: text,
       date: new Date().toISOString().split("T")[0],
-      time: new Date().toLocaleTimeString("en-US", { hour12: false }),
+      time: new Date().toLocaleTimeString("en-US", { hour12: true }),
     };
     axios
       .post("http://localhost:3000/send-message", messageInfo)
@@ -130,7 +130,7 @@ const ChatWithClub = () => {
                   {msg.content}
                 </div>
                 <div className="chat-footer opacity-100">
-                  <time className="text-xs opacity-50">{msg.time}</time>
+                  <time className="text-xs opacity-50"> {msg.date} | {msg.time}</time>
                 </div>
               </div>
             )

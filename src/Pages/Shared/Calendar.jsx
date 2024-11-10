@@ -2,7 +2,6 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import FullCalendar from "@fullcalendar/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { MdNotificationsActive } from "react-icons/md";
 import { BiSearch } from "react-icons/bi";
 import { BsCalendarEvent } from "react-icons/bs";
 

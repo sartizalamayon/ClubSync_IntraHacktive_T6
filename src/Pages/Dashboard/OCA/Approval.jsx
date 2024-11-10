@@ -1,10 +1,9 @@
 import axios from "axios";
-import { BsEye } from "react-icons/bs";
-import { MdNotificationsActive } from "react-icons/md";
+import { useMemo, useState } from 'react';
 import { BiSearch } from "react-icons/bi";
+import { BsEye } from "react-icons/bs";
 import Swal from "sweetalert2";
 import useAllPendingRequests from "../../../hooks/useAllPendingRequests";
-import { useState, useMemo } from 'react';
 
 const Approval = () => {
   const [allPendingRequests, allPendingRequestsRefetch] = useAllPendingRequests();

@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { MdNotificationsActive } from "react-icons/md";
 import { NavLink, Outlet } from "react-router-dom";
 
 
@@ -39,7 +38,7 @@ const OcaChat = () => {
       </div>
       {/* header end */}
       <div className="flex">
-        <div className="w-[300px] p-7 bg-white rounded-lg">
+        <div className="w-[330px] p-7 bg-white rounded-lg">
           <p className="text-xl font-bold text-[#303972] text-left">Messages</p>
           {/* search input */}
           <div className="py-6">
@@ -60,7 +59,7 @@ const OcaChat = () => {
             </label>
           </div>
           {/* chat list */}
-          <div className="h-[300px] overflow-y-auto overflow-x-hidden flex flex-col gap-3">
+          <div className="h-[350px] overflow-y-auto overflow-x-hidden flex flex-col gap-3">
             {/* indivisual chats */}
             {clubsOnly.map((club) => (
               <NavLink key={club._id} to={`/dashboard/oca-chat/${club.email}`}>

@@ -4,6 +4,7 @@ import Root from "../Layout/Root";
 import EventPlanner from "../Pages/ClubPages/EventPlanner/EventPlanner";
 import Chat from "../Pages/Dashboard/Club/Chat";
 import ClubAnalytics from "../Pages/Dashboard/Club/ClubAnalytics";
+import ClubDetails from "../Pages/Dashboard/Club/ClubDetails";
 import DashboardHome from "../Pages/Dashboard/DashboardHome";
 import Approval from "../Pages/Dashboard/OCA/Approval";
 import ChatWithClub from "../Pages/Dashboard/OCA/ChatWithClub";
@@ -13,7 +14,6 @@ import Home from "../Pages/Home/Home";
 import Login from "../Pages/Login/Login";
 import Calendar from "../Pages/Shared/Calendar";
 import PrivateRoute from "./PrivateRoute";
-import ClubDetails from "../Pages/Dashboard/Club/ClubDetails";
 
 export const router = createBrowserRouter([
   {
@@ -75,7 +75,7 @@ export const router = createBrowserRouter([
           element: <ChatWithClub/>
         },
         {
-          path: '/dashboard/oca-chat/:email',
+          path: `/dashboard/oca-chat/:email`,
           element: <ChatWithClub/>
         }
       ]

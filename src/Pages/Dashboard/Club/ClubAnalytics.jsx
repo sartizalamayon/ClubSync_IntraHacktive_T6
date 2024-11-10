@@ -29,8 +29,7 @@ const ClubAnalytics = () => {
         setClubInfo(response.data);
       })
   }, [user?.email, setClubInfo]);
- console.log(clubInfo.totalMembers
- );
+ console.log(clubInfo.totalMembers);
   return (
     <div>
       {/* header */}
@@ -258,7 +257,7 @@ const ClubAnalytics = () => {
               </tr>
             </thead>
             <tbody>
-              {/* row 2 */}
+              {/* row */}
               {events.map((event, idx) => (
                 <tr key={event._id} className="hover">
                   <th>{idx + 1}</th>

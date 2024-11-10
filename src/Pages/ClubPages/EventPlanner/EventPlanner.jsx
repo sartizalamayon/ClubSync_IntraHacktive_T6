@@ -16,6 +16,7 @@ import Swal from "sweetalert2";
 import { AuthContext } from "../../../Context/AuthProvider";
 import usePendingRequests from "../../../hooks/usePendingRequests";
 import useRespondedRequests from "../../../hooks/useRespondedRequests";
+import useCurrUser from "../../../hooks/useCurrUser";
 
 {
   /* These imports should be added at the top of your file */
@@ -41,6 +42,8 @@ const EventPlanner = () => {
     reset,
     formState: { errors },
   } = useForm();
+
+  const [currUser] = useCurrUser();
 
   const { user } = useContext(AuthContext);
   // const [clubInfo, setClubInfo] = useState([]);
@@ -130,7 +133,7 @@ const EventPlanner = () => {
               <div className="w-10 rounded-full">
                 <img
                   alt="Tailwind CSS Navbar component"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                  src={currUser?.photo_url}
                 />
               </div>
             </div>

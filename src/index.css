@@ -23,6 +23,23 @@
   background-color: #303972 !important;
   /* padding: 10px; */
 }
+
+.fc-daygrid-day-frame,
+.fc-col-header-cell {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.fc-scrollgrid-sync-inner {
+  background-color: white !important;
+  border: 0px solid #303972;
+  border-radius: 10px !important;
+  /* margin: 10px !important; */
+}
+
+.fc-event-title-container {
+  background-color: rgb(77, 68, 181) !important;
+}
 thead {
   font-size: 14px;
   font-weight: 600px;
@@ -52,6 +69,7 @@ table {
 .fc-event-title-container {
   background-color: rgb(77, 68, 181) !important;
 }
+
 td {
   border: none !important;
 }
@@ -72,3 +90,5 @@ th {
   margin: 10px;
   /* tee */
 }
+
+

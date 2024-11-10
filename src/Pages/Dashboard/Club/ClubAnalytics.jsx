@@ -4,9 +4,11 @@ import React, { useContext, useState } from "react";
 import { CiCalendarDate } from "react-icons/ci";
 import { MdNotificationsActive } from "react-icons/md";
 import { AuthContext } from "../../../Context/AuthProvider";
+import useCurrUser from "../../../hooks/useCurrUser";
 
 const ClubAnalytics = () => {
   const { user } = useContext(AuthContext);
+  const [currUser] = useCurrUser();
 
   // State for singleEvent, managed independently
   const [singleEvent, setSingleEvent] = useState([]);
@@ -50,7 +52,7 @@ console.log(events);
         </div>
         <div className="flex-none gap-2">
           <div className="form-control">
-            <label className="input input-bordered flex items-center gap-2 rounded-full">
+            <label className="input input-bordered flex items-center gap-2 rounded-full bg-white">
               <input type="text" className="grow " placeholder="Search" />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -66,9 +68,7 @@ console.log(events);
               </svg>
             </label>
           </div>
-          <span className="p-3 bg-white rounded-3xl">
-            <MdNotificationsActive />
-          </span>
+         
           <div className="dropdown dropdown-end">
             <div
               tabIndex={0}
@@ -78,7 +78,7 @@ console.log(events);
               <div className="w-10 rounded-full">
                 <img
                   alt="Tailwind CSS Navbar component"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                  src={currUser?.photo_url}
                 />
               </div>
             </div>

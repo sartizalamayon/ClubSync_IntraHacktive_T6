@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BiMoney } from "react-icons/bi";
 import { BsBuilding } from "react-icons/bs";
@@ -84,7 +84,62 @@ const EventPlanner = () => {
     },
   });
 
-  const onSubmit = (data) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+const onSubmit = async (data) => {
+  try {
+    setIsSubmitting(true);
+    const date = data.date;
+    const room = data.roomNumber;
+
+    // Check if date is before today
+    const selectedDate = new Date(date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid Date",
+        text: "Cannot select a past date",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
+
+    // Check room availability if room is selected
+    if (room) {
+      try {
+        const response = await axios.post(`http://localhost:3000/check-room-availability`, {
+          date,
+          roomNumber: room
+        });
+
+        if (!response.data.available) {
+          Swal.fire({
+            icon: "error",
+            title: "Room Not Available",
+            text: "This room is already booked for the selected date",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          return;
+        }
+      } catch (error) {
+        console.error("Room check error:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Failed to check room availability",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        return;
+      }
+    }
+
+    // If all checks pass, proceed with form submission
     const postData = {
       ...data,
       status: "Pending",
@@ -96,7 +151,20 @@ const EventPlanner = () => {
     };
 
     mutation.mutate(postData);
-  };
+
+  } catch (error) {
+    console.error("Submit error:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "Failed to submit form",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   const { data: clubInfo, isLoading: isClubInfoLoading } = useQuery({
     queryKey: ["clubInfo", user?.email],
@@ -475,16 +543,17 @@ Or If you want to submit a document upload the document in the drive and share t
               </div>
 
               {/* Submit Button */}
-              <div className="w-full flex justify-end pb-5 pt-2">
-                <button
-                  type="submit"
-                  className="bg-[#4c44b3] text-white px-8 py-2.5 rounded-lg hover:bg-opacity-90 
+<div className="w-full flex justify-end pb-5 pt-2">
+  <button
+    type="submit"
+    className="bg-[#4c44b3] text-white px-8 py-2.5 rounded-lg hover:bg-opacity-90 
              transition-colors font-medium flex items-center gap-2 shadow-md
-             hover:shadow-lg active:scale-[0.98] transform duration-100"
-                >
-                  Submit Proposal
-                </button>
-              </div>
+             hover:shadow-lg active:scale-[0.98] transform duration-100
+             disabled:opacity-50 disabled:cursor-not-allowed"
+  >
+      Submit Proposal
+  </button>
+</div>
             </form>
           </div>
         </div>

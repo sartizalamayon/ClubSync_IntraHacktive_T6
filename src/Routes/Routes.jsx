@@ -14,6 +14,7 @@ import Home from "../Pages/Home/Home";
 import Login from "../Pages/Login/Login";
 import Calendar from "../Pages/Shared/Calendar";
 import PrivateRoute from "./PrivateRoute";
+import DashboardPage from "../Pages/Shared/DashboardPage";
 
 export const router = createBrowserRouter([
   {

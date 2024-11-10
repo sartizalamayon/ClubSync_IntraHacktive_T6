@@ -1,13 +1,13 @@
 import axios from "axios";
+import { AnimatePresence, motion } from 'framer-motion';
 import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { BsShieldLock } from 'react-icons/bs';
+import { FaChevronDown, FaUserCircle } from 'react-icons/fa';
+import { RiLockPasswordLine } from 'react-icons/ri';
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../Context/AuthProvider";
-import { FaUserCircle, FaChevronDown } from 'react-icons/fa';
-import { RiLockPasswordLine } from 'react-icons/ri';
-import { motion, AnimatePresence } from 'framer-motion';
-import { BsShieldLock } from 'react-icons/bs';
 
 const Login = () => {
   const navigate = useNavigate();

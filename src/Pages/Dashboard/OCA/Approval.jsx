@@ -1,34 +1,156 @@
 import axios from "axios";
 import { BsEye } from "react-icons/bs";
 import { MdNotificationsActive } from "react-icons/md";
+import { BiSearch } from "react-icons/bi";
 import Swal from "sweetalert2";
 import useAllPendingRequests from "../../../hooks/useAllPendingRequests";
+import { useState, useMemo } from 'react';
 
 const Approval = () => {
   const [allPendingRequests, allPendingRequestsRefetch] = useAllPendingRequests();
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Memoized filtered requests
+  const filteredRequests = useMemo(() => {
+    return allPendingRequests.filter(request => {
+      const searchTerm = searchQuery.toLowerCase();
+      return (
+        request.title?.toLowerCase().includes(searchTerm) ||
+        request.clubMail?.toLowerCase().includes(searchTerm) ||
+        request.date?.toLowerCase().includes(searchTerm)
+      );
+    });
+  }, [allPendingRequests, searchQuery]);
 
   const handleView = async (id) => {
     try {
       const response = await axios.get(`http://localhost:3000/events/${id}`);
       const event = response.data;
-      Swal.fire({
-        title: event.title,
-        html: `
-          <p><strong>Club:</strong> ${event.clubMail}</p>
-          <p><strong>Date:</strong> ${event.date}</p>
-          <p><strong>Description:</strong> ${event.description}</p>
-          <p><strong>Budget:</strong> ${event.budget}</p>
-          <p><strong>Budget Details:</strong> ${event.budgetDetails}</p>
-          <p><strong>Guest Passes Count:</strong> ${event.guestPassesCount}</p>
-          <p><strong>Room Number:</strong> ${event.roomNumber}</p>
-          <p><strong>Additional Requirements:</strong> ${event.additionalRequirements}</p>
-        `,
-        confirmButtonText: 'Close'
+  
+      // Helper function to format date
+      const formatDate = (dateString) => {
+        if (!dateString) return 'Not specified';
+        return new Date(dateString).toLocaleDateString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+      };
+  
+      // Helper function to check and format values
+      const formatValue = (value, type = 'text') => {
+        if (value === null || value === undefined || value === '') {
+          return 'Not specified';
+        }
+        if (type === 'currency' && value) {
+          return `৳${value.toLocaleString()}`;
+        }
+        if (type === 'number') {
+          return value.toString();
+        }
+        return value;
+      };
+  
+      const modalContent = `
+        <div class="text-left p-4">
+          <div class="grid gap-4">
+            <!-- Club Info Section -->
+            <div class="bg-gray-50 p-4 rounded-lg">
+              <h3 class="text-[#303972] font-semibold mb-2 text-lg border-b pb-2">Club Information</h3>
+              <div class="grid gap-2">
+              
+                <p class="text-sm"><span class="font-medium text-[#303972]">Club:</span> 
+                  <span class="text-gray-600">${formatValue(event.clubMail.split('@')[0].toUpperCase())}</span>
+                </p>
+                <p class="text-sm"><span class="font-medium text-[#303972]">Event Date:</span> 
+                  <span class="text-gray-600">${formatDate(event.date)}</span>
+                </p>
+              </div>
+            </div>
+  
+            <!-- Event Details Section -->
+            <div class="bg-gray-50 p-4 rounded-lg">
+              <h3 class="text-[#303972] font-semibold mb-2 text-lg border-b pb-2">Event Details</h3>
+              <div class="grid gap-3">
+                <div>
+                  <p class="text-sm font-medium text-[#303972]">Description:</p>
+                  <p class="text-sm text-gray-600 mt-1">${formatValue(event.description)}</p>
+                </div>
+                ${event.needsRoom ? `
+                  <div>
+                    <p class="text-sm font-medium text-[#303972]">Room Needed:</p>
+                    <p class="text-sm text-gray-600 mt-1">${formatValue(event.roomNumber)}</p>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+  
+            ${event.needsBudget ? `
+              <!-- Budget Section -->
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <h3 class="text-[#303972] font-semibold mb-2 text-lg border-b pb-2">Budget Information</h3>
+                <div class="grid gap-3">
+                  <div>
+                    <p class="text-sm font-medium text-[#303972]">Budget Amount:</p>
+                    <p class="text-sm text-gray-600 mt-1">${formatValue(event.budget, 'currency')}</p>
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-[#303972]">Budget Details:</p>
+                    <p class="text-sm text-gray-600 mt-1">${formatValue(event.budgetDetails)}</p>
+                  </div>
+                </div>
+              </div>
+            ` : ''}
+  
+            ${event.needsGuestPasses ? `
+              <!-- Guest Passes Section -->
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <h3 class="text-[#303972] font-semibold mb-2 text-lg border-b pb-2">Guest Passes</h3>
+                <p class="text-sm"><span class="font-medium text-[#303972]">Number of Passes:</span> 
+                  <span class="text-gray-600">${formatValue(event.guestPassesCount, 'number')}</span>
+                </p>
+              </div>
+            ` : ''}
+  
+            <!-- Additional Requirements Section -->
+            <div class="bg-gray-50 p-4 rounded-lg">
+              <h3 class="text-[#303972] font-semibold mb-2 text-lg border-b pb-2">Additional Requirements</h3>
+              <p class="text-sm text-gray-600">${formatValue(event.additionalRequirements)}</p>
+            </div>
+          </div>
+        </div>
+      `;
+  
+      await Swal.fire({
+        title: `<h2 class="text-xl font-bold text-[#303972]">${event.title}</h2>`,
+        html: modalContent,
+        confirmButtonText: 'Close',
+        confirmButtonColor: '#4c44b3',
+        customClass: {
+          container: 'custom-swal-container',
+          popup: 'custom-swal-popup',
+          content: 'custom-swal-content',
+        },
+        width: '600px',
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown animate__faster'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp animate__faster'
+        }
       });
     } catch (error) {
       console.error('Error fetching event:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to load event details',
+        confirmButtonColor: '#4c44b3'
+      });
     }
   };
+  
 
   const handleAccept = async (id) => {
     try {
@@ -102,92 +224,186 @@ const Approval = () => {
 
   return (
     <div>
-      {/* header */}
+      {/* Header */}
       <div className="navbar p-0 mt-[-20px]">
         <div className="flex-1">
-          <a className="text-3xl font-bold text-[#303972] ">Approval Request</a>
-        </div>
-        <div className="flex-none gap-2">
-          <div className="form-control">
-            <label className="input input-bordered flex items-center gap-2 rounded-full">
-              <input type="text" className="grow " placeholder="Search" />
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 16 16"
-                fill="currentColor"
-                className="h-4 w-4 opacity-70"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </label>
+          <div>
+            <a className="text-3xl font-bold text-[#303972]">Approval Request</a>
+            <p className="text-sm text-gray-500 mt-1">
+              Showing {filteredRequests.length} of {allPendingRequests.length} requests
+            </p>
           </div>
-          <span className="p-3 bg-white rounded-3xl">
-            <MdNotificationsActive />
-          </span>
+        </div>
+        <div className="flex-none gap-4">
+          <div className="form-control">
+            {/* Search Input */}
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search requests..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 pr-4 py-2 w-64 rounded-xl bg-white border-2 border-[#4c44b3] border-opacity-30 
+                         focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent
+                         placeholder-gray-400 text-gray-600"
+              />
+              <BiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#4c44b3] h-5 w-5" />
+            </div>
+          </div>
+          
+          {/* Profile */}
           <div className="dropdown dropdown-end">
             <div
               tabIndex={0}
               role="button"
-              className="btn btn-ghost btn-circle avatar"
+              className="btn btn-ghost btn-circle avatar ring-2 ring-[#4c44b3] ring-opacity-30"
             >
               <div className="w-10 rounded-full">
                 <img
-                  alt="Tailwind CSS Navbar component"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                  alt="User Avatar"
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW710hPlb48q-g88rWvxavK9XmOeFOXU1ZMA&s"
                 />
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="bg-white p-8 rounded-xl mt-2">
-        <div className="overflow-x-auto">
-          <table className="table table-zebra">
-            {/* head */}
-            <thead className="text-[12px] font-semibold text-[#303972]">
-              <tr>
-                <th></th>
-                <th>Title</th>
-                <th>Club</th>
-                <th>Date</th>
-                <th className="text-center">Action</th>
+
+      <div className="bg-white p-8 rounded-xl mt-2 shadow-md">
+  {filteredRequests.length > 0 ? (
+    <div className="overflow-x-auto">
+      <table className="table w-full">
+        {/* Table Header */}
+        <thead>
+          <tr className="bg-[#4c44b3] bg-opacity-5">
+            <th className="text-[#303972] font-semibold px-6 py-4 text-sm rounded-tl-xl">#</th>
+            <th className="text-[#303972] font-semibold px-6 py-4 text-sm">Title</th>
+            <th className="text-[#303972] font-semibold px-6 py-4 text-sm">Club</th>
+            <th className="text-[#303972] font-semibold px-6 py-4 text-sm">Date</th>
+            <th className="text-[#303972] font-semibold px-6 py-4 text-sm text-center rounded-tr-xl">
+              Actions
+            </th>
+          </tr>
+        </thead>
+
+        {/* Table Body */}
+        <tbody className="divide-y divide-gray-100">
+          {filteredRequests.map((event, index) => {
+            // Split and format club mail
+            const clubNameParts = event?.clubMail?.split('@')[0].split('.');
+            const formattedClubName = clubNameParts
+              ?.map(part => part.charAt(0).toUpperCase() + part.slice(1))
+              .join(' ');
+
+            return (
+              <tr 
+                key={event._id} 
+                className="hover:bg-gray-50/50 transition-colors duration-200"
+              >
+                <td className="px-6 py-4 text-gray-600 font-medium">
+                  {String(index + 1).padStart(2, '0')}
+                </td>
+                
+                <td className="px-6 py-4">
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-[#303972] text-base">
+                      {event?.title}
+                    </span>
+                    <span className="text-xs text-gray-500 mt-1">
+                      Created on {new Date(event?.requestDate).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                      })}
+                    </span>
+                  </div>
+                </td>
+
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-[#4c44b3] bg-opacity-10 flex items-center justify-center">
+                      <span className="text-[#4c44b3] font-semibold">
+                        {clubNameParts?.[0]?.charAt(0)?.toUpperCase()}
+                        {clubNameParts?.[1]?.charAt(0)?.toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[#303972] font-medium text-sm">
+                        {formattedClubName}
+                      </span>
+                      <span className="text-gray-500 text-xs">
+                        {event?.clubMail}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+
+                <td className="px-6 py-4">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm 
+                               bg-[#4c44b3] bg-opacity-10 text-[#4c44b3] font-medium">
+                    {new Date(event?.date).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric'
+                    })}
+                  </span>
+                </td>
+
+                <td className="px-6 py-4">
+                  <div className="flex justify-center items-center gap-3">
+                    {/* View Button */}
+                    <button 
+                      onClick={() => handleView(event._id)} 
+                      className="group relative px-3 py-1.5 rounded-lg bg-[#FB7D5B]/10 hover:bg-[#FB7D5B]/20 
+                               transition-all duration-200 cursor-pointer"
+                    >
+                      <BsEye className="text-lg text-[#FB7D5B]" />
+                      <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 
+                                   bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 
+                                   group-hover:opacity-100 transition-opacity duration-200">
+                        View
+                      </span>
+                    </button>
+                    
+                    {/* Accept Button */}
+                    <button 
+                      onClick={() => handleAccept(event._id)} 
+                      className="px-4 py-1.5 rounded-lg text-sm font-medium text-[#4c44b3] 
+                               bg-[#4c44b3]/10 hover:bg-[#4c44b3]/20 transition-all duration-200
+                               flex items-center gap-2"
+                    >
+                      <span className="h-2 w-2 rounded-full bg-green-500"></span>
+                      Accept
+                    </button>
+                    
+                    {/* Reject Button */}
+                    <button 
+                      onClick={() => handleReject(event._id)} 
+                      className="px-4 py-1.5 rounded-lg text-sm font-medium text-[#FB7D5B]
+                               bg-[#FB7D5B]/10 hover:bg-[#FB7D5B]/20 transition-all duration-200
+                               flex items-center gap-2"
+                    >
+                      <span className="h-2 w-2 rounded-full bg-red-500"></span>
+                      Reject
+                    </button>
+                  </div>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {/* row 1 */}
-              {allPendingRequests.map((event, index) => (
-                <tr key={index}>
-                <th>1</th>
-                <td className="text-lg font-semibold text-[#303972]">
-                 {event?.title}
-                </td>
-                <td>{event?.clubMail}</td>
-                <td className="text-sm font-normal text-[#A098AE]">
-                  {event?.date}
-                </td>
-                <td className="flex justify-center items-center">
-                  {/* view - A modal opens here with all the event info*/}
-                  <button onClick={() => handleView(event._id)} className="btn bg-[#FB7D5B] rounded-xl text-white font-normal">
-                    <BsEye />
-                  </button>
-                  {/* accept */}
-                  <button onClick={() => handleAccept(event._id)} className="btn bg-[#FB7D5B] rounded-xl text-white font-normal ml-2">
-                    Accept
-                  </button>
-                  {/* - reject */}
-                  <button onClick={() => handleReject(event._id)} className="btn bg-[#FB7D5B] rounded-xl text-white font-normal ml-2">
-                    Reject
-                  </button>
-                </td>
-              </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  ) : (
+          <div className="text-center py-10">
+            <div className="text-[#4c44b3] text-lg font-medium">No requests found</div>
+            <p className="text-gray-500 mt-2">
+              {searchQuery 
+                ? "Try adjusting your search terms" 
+                : "No pending requests at the moment"}
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

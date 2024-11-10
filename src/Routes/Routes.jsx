@@ -13,6 +13,7 @@ import Home from "../Pages/Home/Home";
 import Login from "../Pages/Login/Login";
 import Calendar from "../Pages/Shared/Calendar";
 import PrivateRoute from "./PrivateRoute";
+import ClubDetails from "../Pages/Dashboard/Club/ClubDetails";
 
 export const router = createBrowserRouter([
   {
@@ -60,6 +61,10 @@ export const router = createBrowserRouter([
       {
         path: '/dashboard/club-info',
         element: <PrivateRoute><ClubInfo/></PrivateRoute>
+      },
+      {
+        path: "/dashboard/club-info/:id",
+        element: <PrivateRoute><ClubDetails /></PrivateRoute>,
       },
       // chat routes
       {

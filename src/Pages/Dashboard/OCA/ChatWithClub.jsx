@@ -17,7 +17,6 @@ const ChatWithClub = () => {
   const [text, setText] = useState('');
 
 
-
   // Reference for the chat container to scroll to the latest message
   const chatContainerRef = useRef(null);
 

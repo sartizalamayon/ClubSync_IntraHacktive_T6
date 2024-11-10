@@ -6,13 +6,14 @@ import { AuthContext } from "../../../Context/AuthProvider";
 
 const ClubAnalytics = () => {
   const { user } = useContext(AuthContext);
+  const [clubInfo, setClubInfo] = useState([]);
   const [events, setEvents] = useState([]);
   const [singleEvent, setSingleEvent] = useState([]);
   const totalBudgetSum = events.reduce((sum, event) => {
     return sum + (typeof event.budget === "number" ? event.budget : 0);
   }, 0);
 
-  console.log("Total Budget Sum:", totalBudgetSum);
+ 
 
   useEffect(() => {
     axios
@@ -23,8 +24,13 @@ const ClubAnalytics = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, [user?.email]);
-  console.log(events, totalBudgetSum);
+    axios.get(`http://localhost:3000/dashboard-info/${user?.email}`)
+     .then((response) => {
+        setClubInfo(response.data);
+      })
+  }, [user?.email, setClubInfo]);
+ console.log(clubInfo.totalMembers
+ );
   return (
     <div>
       {/* header */}
@@ -96,8 +102,8 @@ const ClubAnalytics = () => {
               </div>
               <div>
                 <div className="text-sm text-[#A098AE]">Total Member</div>
-                <div className="font-bold text-3xl text-[#303972]">200</div>
-                <div className="text-sm opacity-50">United States</div>
+                <div className="font-bold text-3xl text-[#303972]">{clubInfo.totalMembers}</div>
+                <div className="text-sm opacity-50">{clubInfo.name}</div>
               </div>
             </div>
           </div>
@@ -157,7 +163,7 @@ const ClubAnalytics = () => {
               </div>
               <div className="flex gap-3 justify-center items-center">
                 <div>
-                  <div className="text-sm text-[#A098AE]">Budget Received</div>
+                  <div className="text-sm text-[#A098AE]">Received</div>
                   <div className="font-bold text-3xl text-[#303972]">
                     {totalBudgetSum}tk
                   </div>

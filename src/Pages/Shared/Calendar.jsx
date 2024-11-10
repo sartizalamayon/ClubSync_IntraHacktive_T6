@@ -65,15 +65,7 @@ const Calendar = () => {
           <h1 className="text-3xl font-bold text-[#303972]">Central Calendar</h1>
         </div>
         <div className="flex-none gap-4">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search events..."
-              className="pl-10 pr-4 py-2 w-64 rounded-xl bg-white border-2 border-[#4c44b3] border-opacity-30 
-                       focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent"
-            />
-            <BiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-[#4c44b3] h-5 w-5" />
-          </div>
+          
           
           <div className="dropdown dropdown-end">
             <div
@@ -84,7 +76,7 @@ const Calendar = () => {
               <div className="w-10 rounded-full">
                 <img
                   alt="User Avatar"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW710hPlb48q-g88rWvxavK9XmOeFOXU1ZMA&s"
                 />
               </div>
             </div>

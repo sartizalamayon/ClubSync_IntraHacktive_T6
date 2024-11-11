@@ -79,7 +79,7 @@ const Announcements = () => {
 
   const fetchAnnouncements = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/announcements');
+      const res = await axios.get('https://clubsyncserver.vercel.app/announcements');
       setAnnouncements(res.data.sort((a, b) => new Date(b.date) - new Date(a.date)));
     } catch (error) {
       console.error('Error fetching announcements:', error);
@@ -88,7 +88,7 @@ const Announcements = () => {
 
   const handleAdd = async (formData) => {
     try {
-      const response = await axios.post('http://localhost:3000/add-announcement', {
+      const response = await axios.post('https://clubsyncserver.vercel.app/add-announcement', {
         ...formData,
         date: new Date(),
         posterEmail: user.email
@@ -135,7 +135,7 @@ const Announcements = () => {
       });
 
       if (result.isConfirmed) {
-        await axios.delete(`http://localhost:3000/delete-announcement/${id}`);
+        await axios.delete(`https://clubsyncserver.vercel.app/delete-announcement/${id}`);
         fetchAnnouncements();
         Swal.fire({
           icon: 'success',

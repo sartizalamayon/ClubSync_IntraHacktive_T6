@@ -270,7 +270,7 @@ const DashboardHome = () => {
  // Fetch user/club data
  useEffect(() => {
    if (user?.email) {
-     axios.get(`http://localhost:3000/dashboard-info/${user.email}`)
+     axios.get(`https://clubsyncserver.vercel.app/dashboard-info/${user.email}`)
        .then(res => setData(res.data))
        .catch(err => console.error('Error fetching dashboard info:', err));
    }
@@ -279,7 +279,7 @@ const DashboardHome = () => {
 
  // Fetch and process upcoming events
  useEffect(() => {
-   axios.get('http://localhost:3000/dashboard-events')
+   axios.get('https://clubsyncserver.vercel.app/dashboard-events')
      .then(res => {
        const sortedEvents = res.data
          .filter(event => new Date(event.date) >= new Date()) // Only future events

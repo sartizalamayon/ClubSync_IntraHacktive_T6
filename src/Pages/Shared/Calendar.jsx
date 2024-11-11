@@ -8,7 +8,7 @@ const Calendar = () => {
   const { data: events = [], isLoading } = useQuery({
     queryKey: ["acceptedEvents"],
     queryFn: () =>
-      axios.get("http://localhost:3000/accepted-events").then((res) => res.data),
+      axios.get("https://clubsyncserver.vercel.app/accepted-events").then((res) => res.data),
   });
 
   // Calculate upcoming events after data is fetched

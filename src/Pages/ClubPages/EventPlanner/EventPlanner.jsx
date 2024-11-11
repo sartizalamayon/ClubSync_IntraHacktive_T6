@@ -60,7 +60,7 @@ const EventPlanner = () => {
 
   const mutation = useMutation({
     mutationFn: (data) => {
-      return axios.post("http://localhost:3000/new-event", data);
+      return axios.post("https://clubsyncserver.vercel.app/new-event", data);
     },
     onSuccess: () => {
       Swal.fire({
@@ -111,7 +111,7 @@ const onSubmit = async (data) => {
     // Check room availability if room is selected
     if (room) {
       try {
-        const response = await axios.post(`http://localhost:3000/check-room-availability`, {
+        const response = await axios.post(`https://clubsyncserver.vercel.app/check-room-availability`, {
           date,
           roomNumber: room
         });
@@ -142,6 +142,7 @@ const onSubmit = async (data) => {
     // If all checks pass, proceed with form submission
     const postData = {
       ...data,
+      budget: parseInt(data.budget),
       status: "Pending",
       response: "",
       feedback: "",
@@ -170,7 +171,7 @@ const onSubmit = async (data) => {
     queryKey: ["clubInfo", user?.email],
     queryFn: () =>
       axios
-        .get(`http://localhost:3000/dashboard-info/${user?.email}`)
+        .get(`https://clubsyncserver.vercel.app/dashboard-info/${user?.email}`)
         .then((res) => res.data),
     enabled: !!user?.email,
   });
@@ -711,7 +712,7 @@ const ProposalCard = ({ event, pendingRequestsRefetch, borderColor }) => {
       .then((result) => {
         if (result.isConfirmed) {
           axios
-            .delete(`http://localhost:3000/event-planner/${eventId}`)
+            .delete(`https://clubsyncserver.vercel.app/event-planner/${eventId}`)
             .then(() => {
               Swal.fire("Deleted!", "Your file has been deleted.", "success");
               pendingRequestsRefetch();

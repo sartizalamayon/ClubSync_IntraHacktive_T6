@@ -11,7 +11,7 @@ const useCurrUser = () => {
     const {data : currUser = {}, refetch: currUserRefetch} = useQuery({
         queryKey: ['currUser', user?.email],
         queryFn: async () => {
-            const res = await axios.get(`http://localhost:3000/current-user/${mail}`);
+            const res = await axios.get(`https://clubsyncserver.vercel.app/current-user/${mail}`);
             return res.data
         },
     }

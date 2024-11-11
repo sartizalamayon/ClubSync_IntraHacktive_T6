@@ -8,7 +8,7 @@ const useRespondedRequests = () => {
     const {data : respondedRequests = [], refetch: respondedRequestsRefetch} = useQuery({
         queryKey: ['responded-events'],
         queryFn: async () => {
-            const res = await axios.get(`http://localhost:3000/get-responded-events/${user?.email}`);
+            const res = await axios.get(`https://clubsyncserver.vercel.app/get-responded-events/${user?.email}`);
             return res.data
         },
     }

@@ -121,7 +121,7 @@ const ClubDetails = () => {
   const onSubmit = async (data) => {
     try {
       console.log(data);
-      await axios.patch(`http://localhost:3000/clubs-update/${club._id}`, data);
+      await axios.patch(`https://clubsyncserver.vercel.app/clubs-update/${club._id}`, data);
       setIsModalOpen(false);
       allClubsRefetch();
       // Handle successful update

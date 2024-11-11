@@ -19,14 +19,14 @@ const ClubAnalytics = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/get-responded-events/${user?.email}`)
+      .get(`https://clubsyncserver.vercel.app/get-responded-events/${user?.email}`)
       .then((response) => {
         setEvents(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
-    axios.get(`http://localhost:3000/dashboard-info/${user?.email}`)
+    axios.get(`https://clubsyncserver.vercel.app/dashboard-info/${user?.email}`)
      .then((response) => {
         setClubInfo(response.data);
       })

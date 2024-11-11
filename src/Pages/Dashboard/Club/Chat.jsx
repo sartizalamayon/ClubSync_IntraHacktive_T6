@@ -25,7 +25,7 @@ const Chat = () => {
       time: new Date().toLocaleTimeString("en-US", { hour12: true })
     };
     
-    axios.post("http://localhost:3000/send-message", messageInfo).then((res) => {
+    axios.post("https://clubsyncserver.vercel.app/send-message", messageInfo).then((res) => {
       setMessage((prevMessages) => [...prevMessages, messageInfo]);
       setText('');
     });
@@ -33,7 +33,7 @@ const Chat = () => {
 
   useEffect(() => {
     
-    axios.get(`http://localhost:3000/get-messages/${user?.email}`)
+    axios.get(`https://clubsyncserver.vercel.app/get-messages/${user?.email}`)
       .then((res) => {
         setMessage(res.data);
         

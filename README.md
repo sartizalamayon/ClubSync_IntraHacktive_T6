@@ -125,11 +125,10 @@ ClubSync is a comprehensive digital solution designed to revolutionize how BRAC 
 
 
 ## 💡 Possible Future Enhancements
-- Advanced analytics and reporting
+- Event feedback reporting
 - Integration with university's academic calendar
-- Resource management module
+- Advanced Analytics
 - Load balancing for scalability
-- 
  
 ## 👥 Team
 - Sartiz Alam Ayon - Full Stack Developer

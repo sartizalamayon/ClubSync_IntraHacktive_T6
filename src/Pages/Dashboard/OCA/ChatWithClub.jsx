@@ -24,7 +24,7 @@ const ChatWithClub = () => {
       time: new Date().toLocaleTimeString("en-US", { hour12: true }),
     };
     axios
-      .post("http://localhost:3000/send-message", messageInfo)
+      .post("https://clubsyncserver.vercel.app/send-message", messageInfo)
       .then((res) => {
         setMessage([...messages, messageInfo]);
         setText("");
@@ -43,7 +43,7 @@ const ChatWithClub = () => {
     queryKey: ["clubInfo"],
     queryFn: async () => {
       const response = await axios.get(
-        "http://localhost:3000/get-club-list"
+        "https://clubsyncserver.vercel.app/get-club-list"
       );
       return response.data;
     },
@@ -54,7 +54,7 @@ const ChatWithClub = () => {
   useEffect(() => {
     
     axios
-      .get(`http://localhost:3000/get-messages/${email}`)
+      .get(`https://clubsyncserver.vercel.app/get-messages/${email}`)
       .then((res) => {
         setMessage(res.data);
       });

@@ -43,7 +43,7 @@ const Login = () => {
   const { data: clubs, isLoading } = useQuery({
     queryKey: ["clubInfo"],
     queryFn: () =>
-      axios.get(`http://localhost:3000/get-club-list`).then((res) => res.data),
+      axios.get(`https://clubsyncserver.vercel.app/get-club-list`).then((res) => res.data),
   });
 
   if (isLoading) {

@@ -5,7 +5,7 @@ const useAllPendingRequests = () => {
     const {data : allPendingRequests = [], refetch: allPendingRequestsRefetch, isLoading} = useQuery({
         queryKey: ['allPendingRequests'],
         queryFn: async () => {
-            const res = await axios.get(`http://localhost:3000/get-all-pending-events`);
+            const res = await axios.get(`https://clubsyncserver.vercel.app/get-all-pending-events`);
             return res.data
         },
     }

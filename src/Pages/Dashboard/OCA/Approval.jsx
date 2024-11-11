@@ -230,10 +230,10 @@ const Approval = () => {
   return (
     <div>
       {/* Header */}
-      <div className="navbar p-0 mt-[-20px]">
+      <div className="navbar pb-3 mt-[-18px]">
         <div className="flex-1">
           <div>
-            <a className="text-3xl font-bold text-[#303972]">Approval Request</a>
+            <a className="text-[1.62rem] font-bold text-[#303972]">Approval Request</a>
             <p className="text-sm text-gray-500 mt-1">
               Showing {filteredRequests.length} of {allPendingRequests.length} requests
             </p>

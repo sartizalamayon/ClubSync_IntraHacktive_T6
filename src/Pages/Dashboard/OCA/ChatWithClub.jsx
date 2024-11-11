@@ -109,7 +109,7 @@ const ChatWithClub = () => {
         </div>
         <div className="divider"></div>
         {/* chat bubble */}
-        <div className="overflow-scroll h-[220px]" ref={chatContainerRef}>
+        <div className="overflow-scroll h-[350px]" ref={chatContainerRef}>
           {messages?.map((msg, index) =>
             msg.senderEmail == "oca@bracu.ac.bd" ? (
               // oca
@@ -123,7 +123,7 @@ const ChatWithClub = () => {
                   </div>
                 </div>
                 <div className="chat-header">OCA</div>
-                <div className="chat-bubble bg-[#F5F5F5] text-lg text-[#303972]">
+                <div className="chat-bubble bg-[#F5F5F5] text-base text-[#303972]">
                   {msg.content}
                 </div>
                 <div className="chat-footer opacity-100">
@@ -144,7 +144,7 @@ const ChatWithClub = () => {
                   </div>
                 </div>
                 <div className="chat-header">{uppercaseUsername}</div>
-                <div className="chat-bubble bg-[#4D44B5] text-white text-lg">
+                <div className="chat-bubble bg-[#4D44B5] text-white text-base">
                   {msg.content}
                 </div>
                 <div className="chat-footer opacity-100">

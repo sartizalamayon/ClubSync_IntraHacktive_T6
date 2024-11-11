@@ -34,32 +34,32 @@ const Dashboard = () => {
                 </li>
                 <li>
                   <NavLink to={"/dashboard"}>
-                    <FaHome className="text-3xl" />
+                    <FaHome className="text-2xl" />
                     Dashboard
                   </NavLink>
                 </li>
                 <li>
                   <NavLink to={"/dashboard/approval"}>
                     <CgEventbrite className="text-2xl" />
-                    <span className="text-xl">Approval</span>
+                    <span className="text-base">Approval</span>
                   </NavLink>
                 </li>
                 <li>
                   <NavLink to={"/dashboard/calendar"}>
-                    <BiCalendar className="text-3xl" />
-                    <span className="text-xl">Calendar</span>
+                    <BiCalendar className="text-2xl" />
+                    <span className="text-base">Calendar</span>
                   </NavLink>
                 </li>
                 <li>
                   <NavLink to={"/dashboard/club-info"}>
-                    <BsInfo className="text-4xl" />
-                    <span className="text-xl">Club Info</span>
+                    <BsInfo className="text-2xl" />
+                    <span className="text-base">Club Info</span>
                   </NavLink>
                 </li>
                 <li>
                   <NavLink to={"/dashboard/oca-chat"}>
-                    <BiChat className="text-3xl" />
-                    <span className="text-xl">Chat</span>
+                    <BiChat className="text-2xl" />
+                    <span className="text-base">Chat</span>
                   </NavLink>
                 </li>
               </>
@@ -67,43 +67,43 @@ const Dashboard = () => {
             {/* CLUB Navbar */}
             {role === "club" && (
               <>
-                <li className="text-center text-4xl font-semibold text-white">
+                <li className="text-center text-2xl font-semibold text-white">
                   {uppercaseUsername}
                 </li>
                 <li>
                   <NavLink to={"/dashboard"}>
-                    <FaHome className="text-3xl" />
+                    <FaHome className="text-xl" />
                     Dashboard
                   </NavLink>
                 </li>
                 <li>
                   <NavLink to={"/dashboard/event-planner"}>
-                    <MdEvent className="text-3xl" />
-                    <span className="text-xl">Event Planner</span>
+                    <MdEvent className="text-2xl" />
+                    <span className="text-base">Event Planner</span>
                   </NavLink>
                 </li>
                 <li>
                   <NavLink to={"/dashboard/calendar"}>
-                    <FaCalendar className="text-3xl" />
-                    <span className="text-xl">Calendar</span>
+                    <FaCalendar className="text-2xl" />
+                    <span className="text-base">Calendar</span>
                   </NavLink>
                 </li>
                 <li>
                   <NavLink to={"/dashboard/club-analytics"}>
-                    <MdAnalytics className="text-3xl" />
-                    <span className="text-xl">Transactions</span>
+                    <MdAnalytics className="text-2xl" />
+                    <span className="text-base">Transactions</span>
                   </NavLink>
                 </li>
                 <li>
                   <NavLink to={"/dashboard/chat"}>
-                    <MdChat className="text-3xl" />
-                    <span className="text-xl">Chat</span>
+                    <MdChat className="text-2xl" />
+                    <span className="text-base">Chat</span>
                   </NavLink>
                 </li>
                 <li>
                   <NavLink to={`/dashboard/club-info/${currUser._id}`}>
-                    <BsInfo className="text-4xl" />
-                    <span className="text-xl">Club Info</span>
+                    <BsInfo className="text-2xl" />
+                    <span className="text-base">Club Info</span>
                   </NavLink>
                 </li>
               </>
@@ -113,14 +113,14 @@ const Dashboard = () => {
 
             <li>
               <NavLink to={"/"}>
-                <FaHome className="text-3xl" />
-                <span className="text-xl">Home</span>
+                <FaHome className="text-xl" />
+                <span className="">Home</span>
               </NavLink>
             </li>
             <li onClick={() => logOut()}>
               <NavLink to={"/login"}>
-                <CgLogOut className="text-3xl" />
-                <span className="text-xl">Logout</span>
+                <CgLogOut className="text-xl" />
+                <span className="">Logout</span>
               </NavLink>
             </li>
           </ul>

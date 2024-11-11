@@ -1,60 +1,43 @@
-import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { CiCalendarDate } from "react-icons/ci";
+import { MdNotificationsActive } from "react-icons/md";
 import { AuthContext } from "../../../Context/AuthProvider";
 import useCurrUser from "../../../hooks/useCurrUser";
 
 const ClubAnalytics = () => {
   const { user } = useContext(AuthContext);
   const [currUser] = useCurrUser();
-  // const [clubInfo, setClubInfo] = useState([]);
-  // const [events, setEvents] = useState([]);
-
-  const [currUser] = useCurrUser();
-  // const [clubInfo, setClubInfo] = useState([]);
-  // const [events, setEvents] = useState([]);
-
-  // State for singleEvent, managed independently
-
+  const [clubInfo, setClubInfo] = useState([]);
+  const [events, setEvents] = useState([]);
   const [singleEvent, setSingleEvent] = useState([]);
-
-  // Fetch club info with loading state
-  const { data: clubInfo = [], isLoading: isClubInfoLoading } = useQuery({
-    queryKey: ["clubInfo", user?.email],
-    queryFn: () => axios.get(`http://localhost:3000/dashboard-info/${user?.email}`).then((res) => res.data),
-    enabled: !!user?.email,
-  });
-
-  // Fetch responded events with loading state
-  const { data: events = [], isLoading: isEventsLoading } = useQuery({
-    queryKey: ["respondedEvents", user?.email],
-    queryFn: () => axios.get(`http://localhost:3000/get-responded-events-accepted/${user?.email}`).then((res) => res.data),
-    enabled: !!user?.email,
-  });
-
-  // Calculate total budget sum
   const totalBudgetSum = events.reduce((sum, event) => {
-    // Convert the budget to an integer if it's a string, and add it to the sum
-    const budget = typeof event.budget === 'string' ? parseInt(event.budget, 10) : event.budget;
-    return sum + (isNaN(budget) ? 0 : budget); // Ensure the value is a valid number
+    return sum + (typeof event.budget === "number" ? event.budget : 0);
   }, 0);
-console.log(events);
-  // Check if either data is loading
-  if (isClubInfoLoading || isEventsLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <span className="loading loading-spinner text-[#4D44B5]"></span>
-      </div>
-    );
-  }
+
  
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/get-responded-events/${user?.email}`)
+      .then((response) => {
+        setEvents(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    axios.get(`http://localhost:3000/dashboard-info/${user?.email}`)
+     .then((response) => {
+        setClubInfo(response.data);
+      })
+  }, [user?.email, setClubInfo]);
+ console.log(clubInfo.totalMembers);
   return (
     <div>
       {/* header */}
       <div className="navbar p-0 mt-[-20px]">
         <div className="flex-1">
-          <a className="text-3xl font-bold text-[#303972] ">Club Activity</a>
+          <a className="text-[1.62rem] font-bold text-[#303972] ">Club Activity</a>
         </div>
         <div className="flex-none gap-2">
           <div className="form-control">
@@ -118,8 +101,7 @@ console.log(events);
               </div>
               <div>
                 <div className="text-sm text-[#A098AE]">Total Member</div>
-                <div className="font-bold text-3xl text-[#303972]">{clubInfo.totalMembers}</div>
-                <div className="text-sm opacity-50">{clubInfo.name}</div>
+                <div className="font-bold text-2xl text-[#303972]">{clubInfo.totalMembers}</div>
               </div>
             </div>
           </div>
@@ -147,7 +129,7 @@ console.log(events);
               </div>
               <div>
                 <div className="text-sm text-[#A098AE]">Total Events</div>
-                <div className="font-bold text-3xl text-[#303972]">
+                <div className="font-bold text-2xl text-[#303972]">
                   {events?.length}
                 </div>
                 {/* <div className="text-sm opacity-50">United States</div> */}
@@ -180,7 +162,7 @@ console.log(events);
               <div className="flex gap-3 justify-center items-center">
                 <div>
                   <div className="text-sm text-[#A098AE]">Received</div>
-                  <div className="font-bold text-3xl text-[#303972]">
+                  <div className="font-bold text-2xl text-[#303972]">
                     {totalBudgetSum}tk
                   </div>
                 </div>
@@ -219,24 +201,24 @@ console.log(events);
         </div>
         {/* modal */}
         <dialog id="my_modal_3" className="modal">
-          <div className="modal-box">
+          <div className="modal-box bg-white">
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
               <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
                 ✕
               </button>
             </form>
-            <h3 className="font-bold text-2xl text-[#303972]">
+            <h3 className="font-bold text-xl text-[#303972]">
               {singleEvent.title}
             </h3>
             <div>
-              <p className="py-4 text-lg text-[#A098AE]">
+              <p className="py-4 text-base text-[#A098AE]">
                 {singleEvent.description}
               </p>
               <div className="flex gap-6">
                 {/* left side */}
                 <div>
-                  <h1 className="text-2xl font-bold text-[#303972]">Details</h1>
+                  <h1 className="text-xl font-bold text-[#303972]">Details</h1>
                   <ul>
                     <li>
                       Budget:{" "}
@@ -248,7 +230,7 @@ console.log(events);
                 </div>
                 {/* right side */}
                 <div>
-                  <h1 className="text-2xl font-bold text-[#303972]">
+                  <h1 className="text-xl font-bold text-[#303972]">
                     Additional
                   </h1>
                   <ul>
@@ -276,21 +258,21 @@ console.log(events);
             <tbody>
               {/* row */}
               {events.map((event, idx) => (
-                <tr key={event._id} className="hover">
+                <tr key={event._id} className="hover:text-[#4CBC9A]">
                   <th>{idx + 1}</th>
                   <td
                     onClick={() => {
                       document.getElementById("my_modal_3").showModal();
                       setSingleEvent(event);
                     }}
-                    className="text-lg font-semibold text-[#303972] hover:cursor-pointer"
+                    className="text-base font-semibold text-[#303972] hover:cursor-pointer "
                   >
                     {event.title}
                   </td>
-                  <td className="text-lg font-semibold text-[#303972]">
+                  <td className="text-base font-semibold text-[#303972]">
                     {`${event.budget ? event.budget + " Bdt" : "N/A"}`}
                   </td>
-                  <td className="text-base text-[#A098AE] flex gap-2 justify-center items-center">
+                  <td className="text-sm text-[#A098AE] flex gap-2 justify-center items-center">
                     <CiCalendarDate />
                     {event.date}
                   </td>

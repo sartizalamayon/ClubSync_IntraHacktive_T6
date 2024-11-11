@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BiMoney } from "react-icons/bi";
 import { BsBuilding } from "react-icons/bs";
@@ -84,7 +84,62 @@ const EventPlanner = () => {
     },
   });
 
-  const onSubmit = (data) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+const onSubmit = async (data) => {
+  try {
+    setIsSubmitting(true);
+    const date = data.date;
+    const room = data.roomNumber;
+
+    // Check if date is before today
+    const selectedDate = new Date(date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid Date",
+        text: "Cannot select a past date",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
+
+    // Check room availability if room is selected
+    if (room) {
+      try {
+        const response = await axios.post(`http://localhost:3000/check-room-availability`, {
+          date,
+          roomNumber: room
+        });
+
+        if (!response.data.available) {
+          Swal.fire({
+            icon: "error",
+            title: "Room Not Available",
+            text: "This room is already booked for the selected date",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          return;
+        }
+      } catch (error) {
+        console.error("Room check error:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Failed to check room availability",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        return;
+      }
+    }
+
+    // If all checks pass, proceed with form submission
     const postData = {
       ...data,
       status: "Pending",
@@ -96,7 +151,20 @@ const EventPlanner = () => {
     };
 
     mutation.mutate(postData);
-  };
+
+  } catch (error) {
+    console.error("Submit error:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "Failed to submit form",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   const { data: clubInfo, isLoading: isClubInfoLoading } = useQuery({
     queryKey: ["clubInfo", user?.email],
@@ -119,7 +187,7 @@ const EventPlanner = () => {
     <div>
       <div className="navbar p-0 mt-[-20px]">
         <div className="flex-1">
-          <a className="text-3xl font-bold text-[#303972] ">
+          <a className="text-[1.62rem] font-bold text-[#303972] ">
             Create a Proposal
           </a>
         </div>
@@ -161,7 +229,7 @@ const EventPlanner = () => {
                   <input
                     {...register("title", { required: true })}
                     className="w-full pl-10 pr-4 py-2 border-2 border-[#4c44b3] border-opacity-30 rounded-lg 
-                     focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white"
+                     focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white placeholder:text-sm"
                     placeholder="Event Title"
                   />
                   {errors.title && (
@@ -184,7 +252,7 @@ const EventPlanner = () => {
                   <textarea
                     {...register("description", { required: true })}
                     className="w-full pl-10 pr-4 py-2 border-2 border-[#4c44b3] border-opacity-30 rounded-lg 
-                     focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white"
+                     focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white placeholder:text-sm"
                     rows={4}
                     placeholder="Event Description"
                   />
@@ -206,7 +274,7 @@ const EventPlanner = () => {
                       className="peer sr-only"
                     />
                     <div
-                      className="w-5 h-5 border-2 border-[#4c44b3] border-opacity-30 rounded 
+                      className="w-4 h-4 border-2 border-[#4c44b3] border-opacity-30 rounded 
                          bg-white transition-all duration-300
                          peer-checked:border-[#4c44b3] peer-checked:border-opacity-100
                          peer-checked:bg-[#4c44b3] group-hover:border-opacity-50"
@@ -217,8 +285,8 @@ const EventPlanner = () => {
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-8 w-8"
-                        viewBox="0 0 54 44"
+                        className="h-4 w-4"
+                        viewBox="0 0 0 0"
                         fill="currentColor"
                       >
                         <path
@@ -229,7 +297,7 @@ const EventPlanner = () => {
                       </svg>
                     </div>
                   </div>
-                  <span className="text-[#4c44b3] font-medium select-none flex items-center gap-2">
+                  <span className="text-[#4c44b3] font-medium select-none flex items-center gap-2 text-sm">
                     Budget Required
                   </span>
                 </label>
@@ -241,7 +309,7 @@ const EventPlanner = () => {
                         type="number"
                         {...register("budget", { required: showBudget })}
                         className="w-full pl-10 pr-4 py-2 border-2 border-[#4c44b3] border-opacity-30 rounded-lg 
-                         focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white"
+                         focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white placeholder:text-sm"
                         placeholder="Budget Amount"
                       />
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -255,7 +323,7 @@ const EventPlanner = () => {
                       <textarea
                         {...register("budgetDetails", { required: showBudget })}
                         className="w-full pl-10 pr-4 py-2 border-2 border-[#4c44b3] border-opacity-30 rounded-lg 
-                         focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white"
+                         focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white placeholder:text-sm"
                         rows={3}
                         placeholder="Provide detailed budget breakdown"
                       />
@@ -274,7 +342,7 @@ const EventPlanner = () => {
                       className="peer sr-only"
                     />
                     <div
-                      className="w-5 h-5 border-2 border-[#4c44b3] border-opacity-30 rounded 
+                      className="w-4 h-4 border-2 border-[#4c44b3] border-opacity-30 rounded 
                          bg-white transition-all duration-300
                          peer-checked:border-[#4c44b3] peer-checked:border-opacity-100
                          peer-checked:bg-[#4c44b3] group-hover:border-opacity-50"
@@ -285,8 +353,8 @@ const EventPlanner = () => {
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-8 w-8"
-                        viewBox="0 0 54 44"
+                        className="h-4 w-4"
+                        viewBox="0 0 0 0"
                         fill="currentColor"
                       >
                         <path
@@ -297,7 +365,7 @@ const EventPlanner = () => {
                       </svg>
                     </div>
                   </div>
-                  <span className="text-[#4c44b3] font-medium select-none flex items-center gap-2">
+                  <span className="text-[#4c44b3] text-sm font-medium select-none flex items-center gap-2">
                     Room Required
                   </span>
                 </label>
@@ -311,7 +379,7 @@ const EventPlanner = () => {
                       <select
                         {...register("roomNumber", { required: showRoom })}
                         className="w-full pl-10 pr-4 py-2 border-2 border-[#4c44b3] border-opacity-30 rounded-lg 
-                         focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white"
+                         focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white text-sm"
                       >
                         <option value="">Select a room</option>
                         {[
@@ -343,7 +411,7 @@ const EventPlanner = () => {
                       className="peer sr-only"
                     />
                     <div
-                      className="w-5 h-5 border-2 border-[#4c44b3] border-opacity-30 rounded 
+                      className="w-4 h-4 border-2 border-[#4c44b3] border-opacity-30 rounded 
                          bg-white transition-all duration-300
                          peer-checked:border-[#4c44b3] peer-checked:border-opacity-100
                          peer-checked:bg-[#4c44b3] group-hover:border-opacity-50"
@@ -354,8 +422,8 @@ const EventPlanner = () => {
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-8 w-8"
-                        viewBox="0 0 54 44"
+                        className="h-4 w-4"
+                        viewBox="0 0 0 0"
                         fill="currentColor"
                       >
                         <path
@@ -366,7 +434,7 @@ const EventPlanner = () => {
                       </svg>
                     </div>
                   </div>
-                  <span className="text-[#4c44b3] font-medium select-none flex items-center gap-2">
+                  <span className="text-[#4c44b3] text-sm font-medium select-none flex items-center gap-2">
                     Guest Passes Required
                   </span>
                 </label>
@@ -383,7 +451,7 @@ const EventPlanner = () => {
                           required: showGuestPasses,
                         })}
                         className="w-full pl-10 pr-4 py-2 border-2 border-[#4c44b3] border-opacity-30 rounded-lg 
-                         focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white"
+                         focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white placeholder:text-sm"
                         placeholder="Number of passes needed"
                       />
                     </div>
@@ -393,7 +461,7 @@ const EventPlanner = () => {
 
               {/* Date Section */}
               <div className="space-y-2">
-                <label className="block text-[#4c44b3] font-medium text-sm">
+                <label className="block text-[#4c44b3] font-medium text-sm ">
                   Date <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
@@ -404,7 +472,7 @@ const EventPlanner = () => {
                     type="date"
                     {...register("date", { required: true })}
                     className="w-full pl-10 pr-4 py-2 border-2 border-[#4c44b3] border-opacity-30 rounded-lg 
-                     focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white"
+                     focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white placeholder:text-sm text-sm"
                   />
                 </div>
               </div>
@@ -421,9 +489,11 @@ const EventPlanner = () => {
                   <textarea
                     {...register("additionalRequirements")}
                     className="w-full pl-10 pr-4 py-2 border-2 border-[#4c44b3] border-opacity-30 rounded-lg 
-                     focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white"
+                     focus:outline-none focus:ring-2 focus:ring-[#4c44b3] focus:border-transparent bg-white placeholder:text-sm"
                     rows={4}
-                    placeholder="Anything else you need - Sound System, IT support or something else. If you want to submit a document upload the document in the drive and share the drive link here."
+                    placeholder="Anything else you need - Sound System, IT support or something else.  
+
+Or If you want to submit a document upload the document in the drive and share the drive link here."
                   />
                 </div>
               </div>
@@ -438,7 +508,7 @@ const EventPlanner = () => {
                       className="peer sr-only"
                     />
                     <div
-                      className="w-5 h-5 border-2 border-[#4c44b3] border-opacity-30 rounded 
+                      className="w-4 h-4 border-2 border-[#4c44b3] border-opacity-30 rounded 
                    bg-white transition-all duration-300
                    peer-checked:border-[#4c44b3] peer-checked:border-opacity-100
                    peer-checked:bg-[#4c44b3] group-hover:border-opacity-50"
@@ -449,8 +519,8 @@ const EventPlanner = () => {
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-8 w-8"
-                        viewBox="0 0 54 44"
+                        className="h-4 w-4"
+                        viewBox="0 0 0 0"
                         fill="currentColor"
                       >
                         <path
@@ -461,7 +531,7 @@ const EventPlanner = () => {
                       </svg>
                     </div>
                   </div>
-                  <span className="text-[#4c44b3] font-medium select-none flex items-center gap-2">
+                  <span className="text-[#4c44b3] font-medium select-none flex items-center gap-2 text-sm">
                     Notify your Advisor through email
                   </span>
                 </label>
@@ -473,16 +543,17 @@ const EventPlanner = () => {
               </div>
 
               {/* Submit Button */}
-              <div className="w-full flex justify-end pb-5 pt-2">
-                <button
-                  type="submit"
-                  className="bg-[#4c44b3] text-white px-8 py-2.5 rounded-lg hover:bg-opacity-90 
+<div className="w-full flex justify-end pb-5 pt-2">
+  <button
+    type="submit"
+    className="bg-[#4c44b3] text-white px-8 py-2.5 rounded-lg hover:bg-opacity-90 
              transition-colors font-medium flex items-center gap-2 shadow-md
-             hover:shadow-lg active:scale-[0.98] transform duration-100"
-                >
-                  Submit Proposal
-                </button>
-              </div>
+             hover:shadow-lg active:scale-[0.98] transform duration-100
+             disabled:opacity-50 disabled:cursor-not-allowed"
+  >
+      Submit Proposal
+  </button>
+</div>
             </form>
           </div>
         </div>
@@ -493,7 +564,7 @@ const EventPlanner = () => {
           <div className="rounded-lg">
             <div className="bg-white rounded-xl p-6">
               <div className="flex justify-between items-center">
-                <h2 className="text-[#4c44b3] text-[1.3rem] font-bold">
+                <h2 className="text-[#4c44b3] text-[1.1rem] font-bold">
                   Pending Events
                 </h2>
                 {pendingRequests?.length > 2 && (
@@ -507,7 +578,7 @@ const EventPlanner = () => {
                   </Tooltip>
                 )}
               </div>
-              <p className="text-gray-500">
+              <p className="text-gray-500 text-sm">
                 Events that are not yet responded by the OCA
               </p>
             </div>
@@ -529,7 +600,7 @@ const EventPlanner = () => {
           <div className="rounded-lg">
             <div className="bg-white rounded-xl p-6">
               <div className="flex justify-between items-center">
-                <h2 className="text-[#4c44b3] text-[1.3rem] font-bold">
+                <h2 className="text-[#4c44b3] text-[1.1rem] font-bold">
                   Recent Proposals
                 </h2>
                 {respondedRequests?.length > 2 && (
@@ -543,7 +614,7 @@ const EventPlanner = () => {
                   </Tooltip>
                 )}
               </div>
-              <p className="text-gray-500">
+              <p className="text-gray-500 text-sm">
                 Accepted or Rejected proposals with feedback
               </p>
             </div>
@@ -573,7 +644,7 @@ const EventPlanner = () => {
             ✕
           </label>
           <div className="border-b pb-4 mb-4">
-            <h3 className="font-bold text-[1.3rem] text-[#4c44b3]">
+            <h3 className="font-bold text-[1.1rem] text-[#4c44b3]">
               All Pending Events
             </h3>
           </div>
@@ -602,7 +673,7 @@ const EventPlanner = () => {
             ✕
           </label>
           <div className="border-b pb-4 mb-4">
-            <h3 className="font-bold text-[1.3rem] text-[#4c44b3]">
+            <h3 className="font-bold text-[1.1rem] text-[#4c44b3]">
               All Recent Proposals
             </h3>
           </div>
@@ -664,7 +735,7 @@ const ProposalCard = ({ event, pendingRequestsRefetch, borderColor }) => {
       style={{ borderLeft: `8px solid ${borderColor}` }}
     >
       <div className="flex items-start gap-4 relative">
-        <div className="text-[#4c44b3] font-bold absolute bottom-0 right-1 flex justify-center items-center gap-2 border border-gray-200 p-1 rounded-lg">
+        <div className="text-[#4c44b3]  absolute bottom-0 right-1 flex justify-center items-center gap-2 border border-gray-200 p-1 rounded-lg text-sm">
           <span className="h-2 w-2 inline-block rounded-full bg-[#b6cc29]"></span>
           Pending
         </div>
@@ -681,7 +752,7 @@ const ProposalCard = ({ event, pendingRequestsRefetch, borderColor }) => {
         <div className="flex-1">
           <div className="flex justify-between items-start">
             <div>
-              <h3 className="font-semibold text-lg text-[#4c44b3]">
+              <h3 className="font-semibold text-base text-[#4c44b3]">
                 {event.title}
               </h3>
               <p className="text-gray-500 text-sm mt-1">
@@ -763,7 +834,7 @@ const EventCard = ({ event, borderColor }) => {
         <div className="flex-1">
           <div className="flex justify-between items-start">
             <div>
-              <h3 className="font-semibold text-lg text-[#4c44b3]">
+              <h3 className="font-semibold text-base text-[#4c44b3]">
                 {event.title}
               </h3>
               <p className="text-gray-500 text-sm mt-1">
@@ -789,7 +860,7 @@ const EventCard = ({ event, borderColor }) => {
                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                   />
                 </svg>
-                <span>
+                <span className="text-sm">
                   {new Date(event.date).toLocaleDateString("en-US", {
                     month: "short",
                     day: "numeric",

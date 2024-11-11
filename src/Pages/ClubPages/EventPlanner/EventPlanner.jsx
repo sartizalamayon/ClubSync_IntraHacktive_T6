@@ -142,6 +142,7 @@ const onSubmit = async (data) => {
     // If all checks pass, proceed with form submission
     const postData = {
       ...data,
+      budget: parseInt(data.budget),
       status: "Pending",
       response: "",
       feedback: "",

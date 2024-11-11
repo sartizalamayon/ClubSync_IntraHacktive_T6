@@ -23,7 +23,7 @@ const Approval = () => {
 
   const handleView = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:3000/events/${id}`);
+      const response = await axios.get(`https://clubsyncserver.vercel.app/events/${id}`);
       const event = response.data;
   
       // Helper function to format date
@@ -171,7 +171,7 @@ const Approval = () => {
         };
   
         try {
-          await axios.put(`http://localhost:3000/events/${id}`, updatedEvent);
+          await axios.put(`https://clubsyncserver.vercel.app/events/${id}`, updatedEvent);
           allPendingRequestsRefetch();
           Swal.fire('Accepted', 'The event has been accepted.', 'success');
         } catch (error) {
@@ -211,7 +211,7 @@ const Approval = () => {
           feedback
         };
 
-        await axios.put(`http://localhost:3000/events/${id}`, updatedEvent);
+        await axios.put(`https://clubsyncserver.vercel.app/events/${id}`, updatedEvent);
         allPendingRequestsRefetch();
         Swal.fire('Rejected', 'The event has been rejected.', 'success');
       }

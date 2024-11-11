@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { BiSend } from "react-icons/bi";
 import { FaVideo } from "react-icons/fa";
-import { MdNotificationsActive } from "react-icons/md";
 import { AuthContext } from "../../../Context/AuthProvider";
 import useCurrUser from "../../../hooks/useCurrUser";
 
@@ -25,7 +24,7 @@ const Chat = () => {
       time: new Date().toLocaleTimeString("en-US", { hour12: true })
     };
     
-    axios.post("http://localhost:3000/send-message", messageInfo).then((res) => {
+    axios.post("https://clubsyncserver.vercel.app/send-message", messageInfo).then((res) => {
       setMessage((prevMessages) => [...prevMessages, messageInfo]);
       setText('');
     });
@@ -33,7 +32,7 @@ const Chat = () => {
 
   useEffect(() => {
     
-    axios.get(`http://localhost:3000/get-messages/${user?.email}`)
+    axios.get(`https://clubsyncserver.vercel.app/get-messages/${user?.email}`)
       .then((res) => {
         setMessage(res.data);
         

@@ -7,7 +7,7 @@ const OcaChat = () => {
   const [club, setClubs] = useState([]);
   useEffect(() => {
     axios
-      .get("http://localhost:3000/get-club-list")
+      .get("https://clubsyncserver.vercel.app/get-club-list")
       .then((response) => setClubs(response.data));
   }, []);
   const clubsOnly = club?.filter((user) => user.name !== "OCA");

@@ -2,14 +2,13 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import FullCalendar from "@fullcalendar/react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { BiSearch } from "react-icons/bi";
 import { BsCalendarEvent } from "react-icons/bs";
 
 const Calendar = () => {
   const { data: events = [], isLoading } = useQuery({
     queryKey: ["acceptedEvents"],
     queryFn: () =>
-      axios.get("http://localhost:3000/accepted-events").then((res) => res.data),
+      axios.get("https://clubsyncserver.vercel.app/accepted-events").then((res) => res.data),
   });
 
   // Calculate upcoming events after data is fetched

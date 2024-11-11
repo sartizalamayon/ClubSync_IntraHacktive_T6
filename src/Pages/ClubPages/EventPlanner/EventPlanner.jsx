@@ -7,16 +7,15 @@ import { BsBuilding } from "react-icons/bs";
 import { FaRegFileAlt } from "react-icons/fa";
 import { HiOutlineUserGroup, HiOutlineViewList } from "react-icons/hi";
 import {
-  MdDateRange,
-  MdDescription,
-  MdNotificationsActive,
-  MdTitle,
+    MdDateRange,
+    MdDescription,
+    MdTitle
 } from "react-icons/md";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../../Context/AuthProvider";
+import useCurrUser from "../../../hooks/useCurrUser";
 import usePendingRequests from "../../../hooks/usePendingRequests";
 import useRespondedRequests from "../../../hooks/useRespondedRequests";
-import useCurrUser from "../../../hooks/useCurrUser";
 
 {
   /* These imports should be added at the top of your file */
@@ -60,7 +59,7 @@ const EventPlanner = () => {
 
   const mutation = useMutation({
     mutationFn: (data) => {
-      return axios.post("http://localhost:3000/new-event", data);
+      return axios.post("https://clubsyncserver.vercel.app/new-event", data);
     },
     onSuccess: () => {
       Swal.fire({
@@ -102,7 +101,7 @@ const EventPlanner = () => {
     queryKey: ["clubInfo", user?.email],
     queryFn: () =>
       axios
-        .get(`http://localhost:3000/dashboard-info/${user?.email}`)
+        .get(`https://clubsyncserver.vercel.app/dashboard-info/${user?.email}`)
         .then((res) => res.data),
     enabled: !!user?.email,
   });
@@ -640,7 +639,7 @@ const ProposalCard = ({ event, pendingRequestsRefetch, borderColor }) => {
       .then((result) => {
         if (result.isConfirmed) {
           axios
-            .delete(`http://localhost:3000/event-planner/${eventId}`)
+            .delete(`https://clubsyncserver.vercel.app/event-planner/${eventId}`)
             .then(() => {
               Swal.fire("Deleted!", "Your file has been deleted.", "success");
               pendingRequestsRefetch();

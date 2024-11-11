@@ -24,12 +24,12 @@ const DashboardPage = () => {
   }, 0);
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/dashboard-info/${user?.email}`)
+      .get(`https://clubsyncserver.vercel.app/dashboard-info/${user?.email}`)
       .then((res) => {
         setData(res.data);
       });
     axios
-      .get(`http://localhost:3000/get-responded-events/${user?.email}`)
+      .get(`https://clubsyncserver.vercel.app/get-responded-events/${user?.email}`)
       .then((response) => {
         setTotalEvents(response.data);
       })
@@ -39,7 +39,7 @@ const DashboardPage = () => {
   }, [user?.email]);
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/dashboard-events`).then((res) => {
+    axios.get(`https://clubsyncserver.vercel.app/dashboard-events`).then((res) => {
       setEvents(res.data);
       console.log(res.data);
     });

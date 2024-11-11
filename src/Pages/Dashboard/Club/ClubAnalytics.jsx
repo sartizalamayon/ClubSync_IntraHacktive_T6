@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import { CiCalendarDate } from "react-icons/ci";
-import { MdNotificationsActive } from "react-icons/md";
 import { AuthContext } from "../../../Context/AuthProvider";
 import useCurrUser from "../../../hooks/useCurrUser";
 
@@ -18,14 +17,14 @@ const ClubAnalytics = () => {
   // Fetch club info with loading state
   const { data: clubInfo = [], isLoading: isClubInfoLoading } = useQuery({
     queryKey: ["clubInfo", user?.email],
-    queryFn: () => axios.get(`http://localhost:3000/dashboard-info/${user?.email}`).then((res) => res.data),
+    queryFn: () => axios.get(`https://clubsyncserver.vercel.app/dashboard-info/${user?.email}`).then((res) => res.data),
     enabled: !!user?.email,
   });
 
   // Fetch responded events with loading state
   const { data: events = [], isLoading: isEventsLoading } = useQuery({
     queryKey: ["respondedEvents", user?.email],
-    queryFn: () => axios.get(`http://localhost:3000/get-responded-events-accepted/${user?.email}`).then((res) => res.data),
+    queryFn: () => axios.get(`https://clubsyncserver.vercel.app/get-responded-events-accepted/${user?.email}`).then((res) => res.data),
     enabled: !!user?.email,
   });
 

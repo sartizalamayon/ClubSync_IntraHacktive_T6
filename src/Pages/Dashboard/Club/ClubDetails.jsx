@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import useCurrUser from "../../../hooks/useCurrUser";
 import { useForm, useFieldArray } from 'react-hook-form';
+import Swal from "sweetalert2";
+import axios from "axios";
 
 const PersonCard = ({ person, type }) => {
   return (
@@ -61,7 +63,7 @@ const PersonCard = ({ person, type }) => {
 
 const ClubDetails = () => {
   const { id } = useParams();
-  const [allClubs] = useAllClubs();
+  const [allClubs, allClubsRefetch] = useAllClubs();
   const navigate = useNavigate();
   const club = allClubs.find((c) => c._id === id);
   const [currUser] = useCurrUser();
@@ -118,11 +120,18 @@ const ClubDetails = () => {
 
   const onSubmit = async (data) => {
     try {
-      await axios.patch(`/api/clubs/${club._id}`, data);
+      console.log(data);
+      await axios.patch(`http://localhost:3000/clubs-update/${club._id}`, data);
       setIsModalOpen(false);
+      allClubsRefetch();
       // Handle successful update
     } catch (error) {
       // Handle error
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: {error},
+      })
     }
   };
 
@@ -208,7 +217,8 @@ const ClubDetails = () => {
        {isModalOpen && (
        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
          <div className="bg-white rounded-xl p-8 max-w-lg w-full max-h-[70vh] overflow-y-auto relative">
-           <h2 className="text-2xl font-bold text-[#303972] mb-6">Edit Club Information</h2>
+           <h2 className="text-2xl font-bold text-[#303972] ">Edit Club Information</h2>
+           <p className="text-xs text-gray-500 mb-6">If you want an empty form, just refresh the page and open the form again.</p>
            <button className="absolute text-xl top-6 right-6 font-bold text-red-400" onClick={() => setIsModalOpen(false)}>x</button>
            <form onSubmit={handleSubmit(onSubmit)}>
             
@@ -231,24 +241,6 @@ const ClubDetails = () => {
                )}
              </div>
 
-
-             {/* Email */}
-             <div className="mb-4">
-               <label htmlFor="email" className="block mb-1">
-                 Email
-               </label>
-               <input
-                 type="email"
-                 id="email"
-                 {...register('email', { required: 'Email is required' })}
-                 className={`w-full px-4 py-2 border ${
-                   errors.email ? 'border-red-500' : 'border-gray-300'
-                 } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white`}
-               />
-               {errors.email && (
-                 <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-               )}
-             </div>
 
 
              {/* Photo URL */}

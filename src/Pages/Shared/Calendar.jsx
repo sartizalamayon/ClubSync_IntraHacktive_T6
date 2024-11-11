@@ -3,7 +3,6 @@ import FullCalendar from "@fullcalendar/react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { BsCalendarEvent } from "react-icons/bs";
-import auth from "../../Firebase/Firebase.config";
 
 const Calendar = () => {
   const { data: events = [], isLoading } = useQuery({

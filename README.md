@@ -4,6 +4,10 @@
 
 ClubSync is a comprehensive digital solution designed to revolutionize how BRAC University's Office of Co-curricular Activities (OCA) and club panel members manage their operations. Born from a thorough analysis of pain points in the current system, ClubSync addresses critical challenges in event management, communication, room booking, and budget tracking.
 
+Login Credentials:
+OCA -> oca1234
+BUCC -> bucc1234
+
 ### 🎯 Key Problems Solved
 
 | Problem | Statistics | Solution |
